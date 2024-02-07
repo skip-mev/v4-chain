@@ -6,7 +6,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	abci "github.com/cometbft/cometbft/abci/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/dydxprotocol/v4-chain/protocol/app/process/errors"
 	"github.com/dydxprotocol/v4-chain/protocol/app/process/prices"
 	"github.com/dydxprotocol/v4-chain/protocol/lib"
 )
@@ -84,7 +83,7 @@ func DecodeProcessProposalTxs(
 	numTxs := len(req.Txs)
 	if numTxs < injectedTxCount {
 		return nil, errorsmod.Wrapf(
-			errors.ErrUnexpectedNumMsgs,
+			ErrUnexpectedNumMsgs,
 			"Expected the proposal to contain at least %d txs, but got %d",
 			minTxsCount,
 			numTxs,

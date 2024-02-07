@@ -2,11 +2,11 @@ package prices
 
 import (
 	errorsmod "cosmossdk.io/errors"
-	"github.com/dydxprotocol/v4-chain/protocol/app/process/errors"
+	"github.com/dydxprotocol/v4-chain/protocol/app/process"
 )
 
 var (
-	ErrProposedPriceValidation = errorsmod.Register(errors.ModuleName, 5, "Validation of proposed MsgUpdateMarketPrices failed")
+	ErrProposedPriceValidation = errorsmod.Register(process.ModuleName, 5, "Validation of proposed MsgUpdateMarketPrices failed")
 )
 
 func IncorrectNumberUpdatesError(expected, actual int) error {

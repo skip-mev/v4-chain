@@ -4,7 +4,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/dydxprotocol/v4-chain/protocol/app/prepare/prices"
-	"github.com/dydxprotocol/v4-chain/protocol/app/process/errors"
+	"github.com/dydxprotocol/v4-chain/protocol/app/process"
 	pricestypes "github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
 	slinkyabci "github.com/skip-mev/slinky/abci/types"
 	"github.com/skip-mev/slinky/abci/ve"
@@ -43,14 +43,14 @@ func (mpd *SlinkyMarketPriceDecoder) DecodeUpdateMarketPricesTx(ctx sdk.Context,
 	if ve.VoteExtensionsEnabled(ctx) {
 		// if there isn't a vote-extension in the block when there should be, fail
 		if len(txs) < slinkyabci.NumInjectedTxs {
-			return nil, errors.GetDecodingError(msgUpdateMarketPricesType, fmt.Errorf("expected %v txs, got %v", slinkyabci.NumInjectedTxs, len(txs)))
+			return nil, process.GetDecodingError(msgUpdateMarketPricesType, fmt.Errorf("expected %v txs, got %v", slinkyabci.NumInjectedTxs, len(txs)))
 		}
 
 		// get the expected message from the injected vote-extensions
 		var err error
 		expectedMsg, err = mpd.agg.GetValidMarketPriceUpdates(ctx, txs[slinkyabci.OracleInfoIndex])
 		if err != nil {
-			return nil, errors.GetDecodingError(msgUpdateMarketPricesType, err)
+			return nil, process.GetDecodingError(msgUpdateMarketPricesType, err)
 		}
 	}
 
@@ -62,7 +62,7 @@ func (mpd *SlinkyMarketPriceDecoder) DecodeUpdateMarketPricesTx(ctx sdk.Context,
 
 	updateMarketPricesMsg, ok := updateMarketPrices.GetMsg().(*pricestypes.MsgUpdateMarketPrices)
 	if !ok {
-		return nil, errors.GetDecodingError(msgUpdateMarketPricesType, fmt.Errorf("expected %T, got %T", expectedMsg, updateMarketPricesMsg))
+		return nil, process.GetDecodingError(msgUpdateMarketPricesType, fmt.Errorf("expected %T, got %T", expectedMsg, updateMarketPricesMsg))
 	}
 
 	// check that the UpdateMarketPricesTx matches the expected message

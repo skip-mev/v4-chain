@@ -2,7 +2,7 @@ package prices
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/dydxprotocol/v4-chain/protocol/app/process/errors"
+	"github.com/dydxprotocol/v4-chain/protocol/app/process"
 	pricestypes "github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
 )
 
@@ -33,7 +33,7 @@ type UpdateMarketPricesTx struct {
 // - the underlying msg values are not "valid" according to the index price.
 func (umpt *UpdateMarketPricesTx) Validate() error {
 	if err := umpt.Msg.ValidateBasic(); err != nil {
-		return errors.GetValidateBasicError(umpt.Msg, err)
+		return process.GetValidateBasicError(umpt.Msg, err)
 	}
 
 	if err := umpt.pricesKeeper.PerformStatefulPriceUpdateValidation(umpt.ctx, umpt.Msg, true); err != nil {

@@ -2,7 +2,7 @@ package prices
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/dydxprotocol/v4-chain/protocol/app/process/errors"
+	"github.com/dydxprotocol/v4-chain/protocol/app/process"
 	pricestypes "github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
 	"reflect"
 )
@@ -43,17 +43,17 @@ func NewDefaultUpdateMarketPriceTxDecoder(pk PricesKeeper, txDecoder sdk.TxDecod
 func (mpd *DefaultUpdateMarketPriceTxDecoder) DecodeUpdateMarketPricesTx(ctx sdk.Context, txs [][]byte) (*UpdateMarketPricesTx, error) {
 	tx, err := mpd.txDecoder(txs[len(txs)+UpdateMarketPricesTxLenOffset])
 	if err != nil {
-		return nil, errors.GetDecodingError(msgUpdateMarketPricesType, err)
+		return nil, process.GetDecodingError(msgUpdateMarketPricesType, err)
 	}
 
 	msgs := tx.GetMsgs()
 	if len(msgs) != 1 {
-		return nil, errors.GetUnexpectedNumMsgsError(msgUpdateMarketPricesType, 1, len(msgs))
+		return nil, process.GetUnexpectedNumMsgsError(msgUpdateMarketPricesType, 1, len(msgs))
 	}
 
 	updateMarketPrices, ok := msgs[0].(*pricestypes.MsgUpdateMarketPrices)
 	if !ok {
-		return nil, errors.GetUnexpectedMsgTypeError(msgUpdateMarketPricesType, msgs[0])
+		return nil, process.GetUnexpectedMsgTypeError(msgUpdateMarketPricesType, msgs[0])
 	}
 
 	return &UpdateMarketPricesTx{
