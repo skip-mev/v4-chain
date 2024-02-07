@@ -1324,7 +1324,7 @@ func New(
 	app.SetPrecommiter(app.Precommitter)
 	app.SetPrepareCheckStater(app.PrepareCheckStater)
 
-	strategy := currencypair.NewDeltaCurrencyPairStrategy(app.PricesKeeper)
+	strategy := currencypair.NewDefaultCurrencyPairStrategy(app.PricesKeeper)
 	veCodec := compression.NewCompressionVoteExtensionCodec(
 		compression.NewDefaultVoteExtensionCodec(),
 		compression.NewZLibCompressor(),
@@ -1506,7 +1506,7 @@ func (app *App) initOracle(appOpts servertypes.AppOptions) servicemetrics.Metric
 		app.Logger(),
 		app.oracleClient,
 		time.Second,
-		currencypair.NewDeltaCurrencyPairStrategy(app.PricesKeeper),
+		currencypair.NewDefaultCurrencyPairStrategy(app.PricesKeeper),
 		compression.NewCompressionVoteExtensionCodec(
 			compression.NewDefaultVoteExtensionCodec(),
 			compression.NewZLibCompressor(),

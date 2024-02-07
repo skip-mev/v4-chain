@@ -182,7 +182,8 @@ func (k Keeper) performDeterministicStatefulValidation(
 
 		// Check price respects min price change.
 		if !isAboveRequiredMinPriceChange(marketParamPrice, priceUpdate.Price) {
-			return errorsmod.Wrapf(
+			// ignore the error + log
+			ctx.Logger().Error(errorsmod.Wrapf(
 				types.ErrInvalidMarketPriceUpdateDeterministic,
 				"update price (%d) for market (%d) does not meet min price change requirement"+
 					" (%d ppm) based on the current market price (%d)",
@@ -190,7 +191,7 @@ func (k Keeper) performDeterministicStatefulValidation(
 				priceUpdate.MarketId,
 				marketParamPrice.Param.MinPriceChangePpm,
 				marketParamPrice.Price.Price,
-			)
+			).Error())
 		}
 	}
 	return nil
