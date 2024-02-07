@@ -13,6 +13,7 @@ import (
 	"time"
 
 	custommodule "github.com/dydxprotocol/v4-chain/protocol/app/module"
+	"github.com/dydxprotocol/v4-chain/protocol/app/process/prices"
 
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
@@ -102,11 +103,11 @@ import (
 	"github.com/dydxprotocol/v4-chain/protocol/app/prepare"
 	"github.com/dydxprotocol/v4-chain/protocol/app/process"
 
+	priceUpdateGenerator "github.com/dydxprotocol/v4-chain/protocol/app/prepare/prices"
 	"github.com/dydxprotocol/v4-chain/protocol/lib"
 	"github.com/dydxprotocol/v4-chain/protocol/lib/metrics"
 	timelib "github.com/dydxprotocol/v4-chain/protocol/lib/time"
 	"github.com/dydxprotocol/v4-chain/protocol/x/clob/rate_limit"
-	priceUpdateGenerator "github.com/dydxprotocol/v4-chain/protocol/app/prepare/prices"
 
 	// Mempool
 	"github.com/dydxprotocol/v4-chain/protocol/mempool"
@@ -1324,7 +1325,7 @@ func New(
 				app.ClobKeeper,
 				app.StakingKeeper,
 				app.PerpetualsKeeper,
-				app.PricesKeeper,
+				prices.NewDefaultUpdateMarketPriceTxDecoder(app.PricesKeeper, app.TxConfig().TxDecoder()),
 			),
 		)
 	} else {
@@ -1336,6 +1337,7 @@ func New(
 				app.StakingKeeper,
 				app.PerpetualsKeeper,
 				app.PricesKeeper,
+				prices.NewDefaultUpdateMarketPriceTxDecoder(app.PricesKeeper, app.TxConfig().TxDecoder()),
 			),
 		)
 	}
