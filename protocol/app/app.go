@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"encoding/json"
-	"go.uber.org/zap"
 	"io"
 	"math/big"
 	"net/http"
@@ -12,6 +11,8 @@ import (
 	"runtime/debug"
 	"sync"
 	"time"
+
+	"go.uber.org/zap"
 
 	custommodule "github.com/dydxprotocol/v4-chain/protocol/app/module"
 
@@ -202,6 +203,7 @@ import (
 	"github.com/dydxprotocol/v4-chain/protocol/indexer/msgsender"
 
 	// Slinky
+	"github.com/skip-mev/slinky/abci/strategies/aggregator"
 	compression "github.com/skip-mev/slinky/abci/strategies/codec"
 	"github.com/skip-mev/slinky/abci/strategies/currencypair"
 	"github.com/skip-mev/slinky/abci/ve"
@@ -209,6 +211,9 @@ import (
 	oracleclient "github.com/skip-mev/slinky/service/clients/oracle"
 	servicemetrics "github.com/skip-mev/slinky/service/metrics"
 	promserver "github.com/skip-mev/slinky/service/servers/prometheus"
+
+	voteweighted "github.com/skip-mev/slinky/pkg/math/voteweighted"
+	slinkyproposals "github.com/skip-mev/slinky/abci/proposals"
 )
 
 var (
@@ -1355,49 +1360,89 @@ func New(
 	app.SetPrecommiter(app.Precommitter)
 	app.SetPrepareCheckStater(app.PrepareCheckStater)
 
+	strategy := currencypair.NewDeltaCurrencyPairStrategy(app.PricesKeeper)
+	veCodec := compression.NewCompressionVoteExtensionCodec(
+		compression.NewDefaultVoteExtensionCodec(),
+		compression.NewZLibCompressor(),
+	)
+	extCommitCodec := compression.NewCompressionExtendedCommitCodec(
+		compression.NewDefaultExtendedCommitCodec(),
+		compression.NewZLibCompressor(),
+	)
+	priceUpdateGenerator := priceUpdateGenerator.NewSlinkyPriceUpdateGenerator(
+		aggregator.NewDefaultVoteAggregator(
+			logger,
+			voteweighted.MedianFromContext(
+				logger,
+				app.StakingKeeper,
+				baseapp.VoteExtensionThreshold,
+			),
+			strategy,
+		),
+		extCommitCodec,
+		veCodec,
+		strategy,
+	)
+
+	var dydxPrepareProposalHandler sdk.PrepareProposalHandler
 	// PrepareProposal setup.
 	if appFlags.NonValidatingFullNode {
-		app.SetPrepareProposal(prepare.FullNodePrepareProposalHandler())
+		dydxPrepareProposalHandler = prepare.FullNodePrepareProposalHandler()
 	} else {
-		app.SetPrepareProposal(
-			prepare.PrepareProposalHandler(
-				txConfig,
-				app.BridgeKeeper,
-				app.ClobKeeper,
-				app.PerpetualsKeeper,
-				priceUpdateGenerator.NewDefaultPriceUpdateGenerator(app.PricesKeeper),
-			),
+		// setup slinky prepare-proposal handler
+		dydxPrepareProposalHandler = prepare.PrepareProposalHandler(
+			txConfig,
+			app.BridgeKeeper,
+			app.ClobKeeper,
+			app.PerpetualsKeeper,
+			priceUpdateGenerator,
 		)
 	}
 
+	priceUpdateDecoder := process.NewSlinkyMarketPriceDecoder(
+		process.NewDefaultUpdateMarketPriceTxDecoder(app.PricesKeeper, app.txConfig.TxDecoder()),
+		priceUpdateGenerator,
+	)
+
 	// ProcessProposal setup.
+	var dydxProcessProposalHandler sdk.ProcessProposalHandler
 	if appFlags.NonValidatingFullNode {
 		// Note: If the command-line flag `--non-validating-full-node` is enabled, this node will use
 		// an implementation of `ProcessProposal` which always returns `abci.ResponseProcessProposal_ACCEPT`.
 		// Full-nodes do not participate in consensus, and therefore should not participate in voting / `ProcessProposal`.
-		app.SetProcessProposal(
-			process.FullNodeProcessProposalHandler(
-				txConfig,
-				app.BridgeKeeper,
-				app.ClobKeeper,
-				app.StakingKeeper,
-				app.PerpetualsKeeper,
-				process.NewDefaultUpdateMarketPriceTxDecoder(app.PricesKeeper, app.TxConfig().TxDecoder()),
-			),
+		dydxProcessProposalHandler = process.FullNodeProcessProposalHandler(
+			txConfig,
+			app.BridgeKeeper,
+			app.ClobKeeper,
+			app.StakingKeeper,
+			app.PerpetualsKeeper,
+			priceUpdateDecoder,
 		)
 	} else {
-		app.SetProcessProposal(
-			process.ProcessProposalHandler(
-				txConfig,
-				app.BridgeKeeper,
-				app.ClobKeeper,
-				app.StakingKeeper,
-				app.PerpetualsKeeper,
-				app.PricesKeeper,
-				process.NewDefaultUpdateMarketPriceTxDecoder(app.PricesKeeper, app.TxConfig().TxDecoder()),
-			),
+		dydxProcessProposalHandler = process.ProcessProposalHandler(
+			txConfig,
+			app.BridgeKeeper,
+			app.ClobKeeper,
+			app.StakingKeeper,
+			app.PerpetualsKeeper,
+			app.PricesKeeper,
+			priceUpdateDecoder,
 		)
 	}
+
+	// register prepare / process proposal handlers
+	proposalHandler := slinkyproposals.NewProposalHandler(
+		logger,
+		dydxPrepareProposalHandler,
+		dydxProcessProposalHandler,
+		ve.NewDefaultValidateVoteExtensionsFn(app.ChainID(), app.StakingKeeper),
+		veCodec,
+		extCommitCodec,
+		strategy,
+		oracleMetrics,
+	)
+	app.SetPrepareProposal(proposalHandler.PrepareProposalHandler())
+	app.SetProcessProposal(proposalHandler.ProcessProposalHandler())
 
 	// Vote Extension setup.
 	voteExtensionsHandler := ve.NewVoteExtensionHandler(
