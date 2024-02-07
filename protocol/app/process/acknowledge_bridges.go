@@ -35,19 +35,19 @@ func DecodeAcknowledgeBridgesTx(
 	// Decode.
 	tx, err := decoder(txBytes)
 	if err != nil {
-		return nil, GetDecodingError(msgAcknowledgeBridgesType, err)
+		return nil, getDecodingError(msgAcknowledgeBridgesType, err)
 	}
 
 	// Check msg length.
 	msgs := tx.GetMsgs()
 	if len(msgs) != 1 {
-		return nil, GetUnexpectedNumMsgsError(msgAcknowledgeBridgesType, 1, len(msgs))
+		return nil, getUnexpectedNumMsgsError(msgAcknowledgeBridgesType, 1, len(msgs))
 	}
 
 	// Check msg type.
 	acknowledgeBridges, ok := msgs[0].(*types.MsgAcknowledgeBridges)
 	if !ok {
-		return nil, GetUnexpectedMsgTypeError(msgAcknowledgeBridgesType, msgs[0])
+		return nil, getUnexpectedMsgTypeError(msgAcknowledgeBridgesType, msgs[0])
 	}
 
 	return &AcknowledgeBridgesTx{
@@ -76,7 +76,7 @@ func (abt *AcknowledgeBridgesTx) Validate() error {
 			1,
 			[]gometrics.Label{metrics.GetLabelForStringValue(metrics.Error, metrics.ValidateBasic)},
 		)
-		return GetValidateBasicError(abt.msg, err)
+		return getValidateBasicError(abt.msg, err)
 	}
 
 	if len(abt.msg.Events) == 0 {

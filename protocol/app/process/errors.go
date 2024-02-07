@@ -2,9 +2,7 @@ package process
 
 // DONTCOVER
 
-import (
-	errorsmod "cosmossdk.io/errors"
-)
+import errorsmod "cosmossdk.io/errors"
 
 const (
 	ModuleName = "process_proposal"

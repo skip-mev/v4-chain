@@ -64,7 +64,7 @@ func (omt *OtherMsgsTx) Validate() error {
 	for _, msg := range omt.msgs {
 		if m, ok := msg.(sdk.HasValidateBasic); ok {
 			if err := m.ValidateBasic(); err != nil {
-				return GetValidateBasicError(msg, err)
+				return getValidateBasicError(msg, err)
 			}
 		}
 	}
