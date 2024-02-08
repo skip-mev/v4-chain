@@ -93,7 +93,6 @@ import (
 	"github.com/cosmos/ibc-go/modules/capability"
 	capabilitykeeper "github.com/cosmos/ibc-go/modules/capability/keeper"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
-	"github.com/dydxprotocol/v4-chain/protocol/daemons/configs"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
@@ -121,7 +120,6 @@ import (
 	liquidationclient "github.com/dydxprotocol/v4-chain/protocol/daemons/liquidation/client"
 	metricsclient "github.com/dydxprotocol/v4-chain/protocol/daemons/metrics/client"
 	pricefeedclient "github.com/dydxprotocol/v4-chain/protocol/daemons/pricefeed/client"
-	"github.com/dydxprotocol/v4-chain/protocol/daemons/pricefeed/client/constants"
 	pricefeed_types "github.com/dydxprotocol/v4-chain/protocol/daemons/pricefeed/types"
 	daemonserver "github.com/dydxprotocol/v4-chain/protocol/daemons/server"
 	daemonservertypes "github.com/dydxprotocol/v4-chain/protocol/daemons/server/types"
@@ -757,46 +755,6 @@ func New(
 			go func() {
 				app.RegisterDaemonWithHealthMonitor(app.LiquidationsClient, maxDaemonUnhealthyDuration)
 				if err := app.LiquidationsClient.Start(
-					// The client will use `context.Background` so that it can have a different context from
-					// the main application.
-					context.Background(),
-					daemonFlags,
-					appFlags,
-					&daemontypes.GrpcClientImpl{},
-				); err != nil {
-					panic(err)
-				}
-			}()
-		}
-
-		// Non-validating full-nodes have no need to run the price daemon.
-		if !appFlags.NonValidatingFullNode && daemonFlags.Price.Enabled {
-			exchangeQueryConfig := configs.ReadExchangeQueryConfigFile(homePath)
-			// Start pricefeed client for sending prices for the pricefeed server to consume. These prices
-			// are retrieved via third-party APIs like Binance and then are encoded in-memory and
-			// periodically sent via gRPC to a shared socket with the server.
-			app.PriceFeedClient = pricefeedclient.StartNewClient(
-				// The client will use `context.Background` so that it can have a different context from
-				// the main application.
-				context.Background(),
-				daemonFlags,
-				appFlags,
-				logger,
-				&daemontypes.GrpcClientImpl{},
-				exchangeQueryConfig,
-				constants.StaticExchangeDetails,
-				&pricefeedclient.SubTaskRunnerImpl{},
-			)
-			app.RegisterDaemonWithHealthMonitor(app.PriceFeedClient, maxDaemonUnhealthyDuration)
-		}
-
-		// Start Bridge Daemon.
-		// Non-validating full-nodes have no need to run the bridge daemon.
-		if !appFlags.NonValidatingFullNode && daemonFlags.Bridge.Enabled {
-			app.BridgeClient = bridgeclient.NewClient(logger)
-			go func() {
-				app.RegisterDaemonWithHealthMonitor(app.BridgeClient, maxDaemonUnhealthyDuration)
-				if err := app.BridgeClient.Start(
 					// The client will use `context.Background` so that it can have a different context from
 					// the main application.
 					context.Background(),
