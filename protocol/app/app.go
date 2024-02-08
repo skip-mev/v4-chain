@@ -768,25 +768,6 @@ func New(
 			}()
 		}
 
-		// Start Bridge Daemon.
-		// Non-validating full-nodes have no need to run the bridge daemon.
-		if !appFlags.NonValidatingFullNode && daemonFlags.Bridge.Enabled {
-			app.BridgeClient = bridgeclient.NewClient(logger)
-			go func() {
-				app.RegisterDaemonWithHealthMonitor(app.BridgeClient, maxDaemonUnhealthyDuration)
-				if err := app.BridgeClient.Start(
-					// The client will use `context.Background` so that it can have a different context from
-					// the main application.
-					context.Background(),
-					daemonFlags,
-					appFlags,
-					&daemontypes.GrpcClientImpl{},
-				); err != nil {
-					panic(err)
-				}
-			}()
-		}
-
 		// Start the Metrics Daemon.
 		// The metrics daemon is purely used for observability. It should never bring the app down.
 		// TODO(CLOB-960) Don't start this goroutine if telemetry is disabled
