@@ -1058,8 +1058,6 @@ github.com/sirupsen/logrus v1.6.0/go.mod h1:7uNnSEd1DgxDLC74fIahvMZmmYsHGZGEOFrf
 github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
-github.com/skip-mev/petri/cosmos/v2 v2.0.0-20240206134528-df5f720641e8 h1:lwSqNAHxzdAcn10Fd+qCxMaL2Yvc4nMKWvXrgRv5jiM=
-github.com/skip-mev/petri/cosmos/v2 v2.0.0-20240206134528-df5f720641e8/go.mod h1:HyMWeIDUCwY8cMDMzCDN1rxPAgif2NMBv1wbxEgcX7E=
 github.com/skip-mev/slinky v0.2.1-0.20240208153048-578001b0818f h1:mVpiuWQj6fsqP/8vnaDg5NDDLvkyAtBYXzla0oLi2CI=
 github.com/skip-mev/slinky v0.2.1-0.20240208153048-578001b0818f/go.mod h1:fJe2kWxWeQA/ZNDYCFPe+1R6lERLSHYMVcjCy9dMbLc=
 github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1:OnSkiWE9lh6wB0YB77sQom3nweQdgAjqCqsofrRNTgc=

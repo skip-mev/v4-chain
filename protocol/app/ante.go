@@ -12,6 +12,8 @@ import (
 	clobtypes "github.com/dydxprotocol/v4-chain/protocol/x/clob/types"
 )
 
+const incrementSequenceAnteHandlerIndex = 12
+
 // HandlerOptions are the options required for constructing an SDK AnteHandler.
 // Note: This struct is defined here in order to add `ClobKeeper`. We use
 // struct embedding to include the normal cosmos-sdk `HandlerOptions`.
@@ -49,7 +51,7 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 
 // NewAnteDecoratorChain returns a list of AnteDecorators in the expected application chain ordering
 func NewAnteDecoratorChain(options HandlerOptions) []sdk.AnteDecorator {
-	return []sdk.AnteDecorator{
+	handlers := []sdk.AnteDecorator{
 		// Note: app-injected messages, and clob transactions don't require Gas fees.
 		libante.NewAppInjectedMsgAnteWrapper(
 			clobante.NewSingleMsgClobTxAnteWrapper(
@@ -112,4 +114,12 @@ func NewAnteDecoratorChain(options HandlerOptions) []sdk.AnteDecorator {
 		clobante.NewRateLimitDecorator(options.ClobKeeper),
 		clobante.NewClobDecorator(options.ClobKeeper),
 	}
+
+	// if we're building the app for a load-test we need to ignore the ante-handler tasked w/ incrementing sequence numbers
+	if SkipSequenceIncrementAnteHandler {
+		firstSegment := handlers[:incrementSequenceAnteHandlerIndex]
+		handlers = append(firstSegment, handlers[incrementSequenceAnteHandlerIndex+1:]...)
+	}
+
+	return handlers
 }

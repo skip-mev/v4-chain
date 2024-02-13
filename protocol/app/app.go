@@ -1570,6 +1570,12 @@ func (app *App) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
 	return app.ModuleManager.BeginBlock(ctx)
 }
 
+func (app *App) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
+	res, err := app.BaseApp.CheckTx(req)
+	app.Logger().Info("CheckTx", "response", res, "error", err)
+	return res, err
+}
+
 // EndBlocker application updates every end block
 func (app *App) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
 	// Reset the logger for middleware.
