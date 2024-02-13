@@ -39,3 +39,6 @@ localnet
 .idea/
 *.iml
 __debug_bin
+
+# Go workspace
+go.work.*

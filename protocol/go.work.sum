@@ -157,6 +157,7 @@ github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.3.0/go.mod h1:tPaiy8S5bQ
 github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1/go.mod h1:xomTg63KZ2rFqZQzSB4Vz2SUXa1BpHTVz9L5PTmPC4E=
 github.com/BurntSushi/toml v1.2.1 h1:9F2/+DoOYIOksmaJFPw1tGFy1eDnIJXg+UHjuD8lTak=
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
+github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/CloudyKit/fastprinter v0.0.0-20200109182630-33d98a066a53/go.mod h1:+3IMCy2vIlbG1XG/0ggNQv0SvxCAIpPM5b1nCz56Xno=
 github.com/CloudyKit/jet/v6 v6.2.0/go.mod h1:d3ypHeIRNo2+XyqnGA8s+aphtcVpjP5hPwP/Lzo7Ro4=
@@ -895,6 +896,10 @@ github.com/sivchari/tenv v1.7.1/go.mod h1:64yStXKSOxDfX47NlhVwND4dHwfZDdbp2Lyl01
 github.com/skeema/knownhosts v1.1.0/go.mod h1:sKFq3RD6/TKZkSWn8boUbDC7Qkgcv+8XXijpFO6roag=
 github.com/skip-mev/petri v0.0.0-20240206134528-df5f720641e8 h1:wX9cTBRyJt7SRF+ONNnvMsfIBssixiKrFiPblOshlaA=
 github.com/skip-mev/petri v0.0.0-20240206134528-df5f720641e8/go.mod h1:GBq0t88Eu2HzWe5SGyLSh/AN9UQNRSEoxMR9H9o8NZg=
+github.com/skip-mev/petri/core/v2 v2.0.0-20240213232358-76d4b887e471 h1:PQ9M1R8d/gElOcJLgMxVBihCu9/AgwDShIiE8isel/s=
+github.com/skip-mev/petri/core/v2 v2.0.0-20240213232358-76d4b887e471/go.mod h1:N/mtJjag7XuJpCiYBGM0peBd24zwQZv/nerblYSL8Lw=
+github.com/skip-mev/petri/cosmos/v2 v2.0.0-20240213232358-76d4b887e471 h1:yniB/X56SBALBQ0t0QW1lzz7RLrOmCuLhzB2galPeQs=
+github.com/skip-mev/petri/cosmos/v2 v2.0.0-20240213232358-76d4b887e471/go.mod h1:HyMWeIDUCwY8cMDMzCDN1rxPAgif2NMBv1wbxEgcX7E=
 github.com/skip-mev/petri/provider/v2 v2.0.2 h1:3I8PezCrREoR/3L0h+0UDgu4VGjp54LhDOobOBzLg+w=
 github.com/skip-mev/petri/provider/v2 v2.0.2/go.mod h1:sZ7WfMAlfMWf1t645HYz/OpL05x4xeVayRMzEi4I/b4=
 github.com/skip-mev/petri/types/v2 v2.0.0 h1:YkkYhg7xEjA1nwK0MSAQkQsdFZbr0jkuzC/whlfAFZk=

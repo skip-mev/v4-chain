@@ -434,3 +434,7 @@ check-sample-pregenesis-up-to-date:
 loadtest-build:
 	@echo "Build loadtest test image at commit ${GIT_COMMIT_HASH}"
 	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) . -t dydxprotocol-base --no-cache --build-arg BUILD_TAGS="netgo,ledger,muslc,skip_sequence_increment_ante_handler"
+
+loadtest-run:
+	@echo "Running loadtest at commit ${GIT_COMMIT_HASH}"
+	go test -v -race ./testing/petri/...
