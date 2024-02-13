@@ -14,10 +14,6 @@ replace (
 	github.com/cosmos/cosmos-sdk => github.com/dydxprotocol/cosmos-sdk v0.50.4-0.20240126201553-f1da3a9865bb
 )
 
-replace github.com/skip-mev/petri/core/v2 => ../../../../petri/core
-
-replace github.com/skip-mev/petri/cosmos/v2 => ../../../../petri/cosmos
-
 replace (
 	// Copy over the same replace functions for Cosmos SDK.
 	// https://github.com/dydxprotocol/cosmos-sdk/blob/fbb26831d28f66e86bfc31283b4be9290929a4a5/go.mod#L171
@@ -42,8 +38,8 @@ require (
 	github.com/cosmos/ibc-go/v8 v8.0.0
 	github.com/dydxprotocol/v4-chain/protocol v0.0.0-00010101000000-000000000000
 	github.com/informalsystems/tm-load-test v1.3.0
-	github.com/skip-mev/petri/core/v2 v2.0.0-20240206134528-df5f720641e8
-	github.com/skip-mev/petri/cosmos/v2 v2.0.0-20240206134528-df5f720641e8
+	github.com/skip-mev/petri/core/v2 v2.0.0-20240213232358-76d4b887e471
+	github.com/skip-mev/petri/cosmos/v2 v2.0.0-20240213232358-76d4b887e471
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.26.0
 )
