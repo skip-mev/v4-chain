@@ -1,6 +1,6 @@
 module github.com/dydxprotocol/v4-chain/protocol
 
-go 1.21
+go 1.21.5
 
 require (
 	cosmossdk.io/api v0.7.2
