@@ -427,3 +427,10 @@ check-sample-pregenesis-up-to-date:
 	@docker run -v $(CURDIR):/workspace check-sample-pregenesis 
 
 .PHONY: update-sample-pregenesis check-sample-pregenesis-up-to-date
+
+###############################################################################
+###                              LoadTests                                  ###
+###############################################################################
+loadtest-build:
+	@echo "Build loadtest test image at commit ${GIT_COMMIT_HASH}"
+	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) . -t dydxprotocol-base --no-cache --build-arg BUILD_TAGS="netgo,ledger,muslc,skip_sequence_increment_ante_handler"

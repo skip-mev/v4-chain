@@ -13,6 +13,10 @@ FROM golang@sha256:${GOLANG_1_21_ALPINE_DIGEST} as builder
 ARG VERSION
 ARG COMMIT
 
+# SkipSequenceIncrement is used to determine whether or not we should be building the binary to 
+# exclude the sequence number increment ante-handler from the app's ante-handler chain
+ARG BUILD_TAGS="netgo,ledger,muslc"
+
 RUN set -eux; apk add --no-cache ca-certificates build-base; apk add git linux-headers bash binutils-gold
 
 # Download go dependencies
@@ -30,12 +34,12 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/root/go/pkg/mod \
     go build \
       -mod=readonly \
-      -tags "netgo,ledger,muslc" \
+      -tags ${BUILD_TAGS} \
       -ldflags "-X github.com/cosmos/cosmos-sdk/version.Name="dydxprotocol" \
               -X github.com/cosmos/cosmos-sdk/version.AppName="dydxprotocold" \
               -X github.com/cosmos/cosmos-sdk/version.Version=$VERSION \
               -X github.com/cosmos/cosmos-sdk/version.Commit=$COMMIT \
-              -X github.com/cosmos/cosmos-sdk/version.BuildTags='netgo,ledger,muslc' \
+              -X github.com/cosmos/cosmos-sdk/version.BuildTags=${BUILD_TAGS} \
               -w -s -linkmode=external -extldflags '-Wl,-z,muldefs -static'" \
       -trimpath \
       -o /dydxprotocol/build/ \

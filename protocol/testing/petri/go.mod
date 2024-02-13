@@ -1,6 +1,6 @@
 module github.com/dydxprotocol/v4-chain/protocol/testing/petri
 
-go 1.21.5
+go 1.21.3
 
 replace github.com/dydxprotocol/v4-chain/protocol => ../../
 
@@ -15,6 +15,8 @@ replace (
 )
 
 replace github.com/skip-mev/petri/core/v2 => ../../../../petri/core
+
+replace github.com/skip-mev/petri/cosmos/v2 => ../../../../petri/cosmos
 
 replace (
 	// Copy over the same replace functions for Cosmos SDK.

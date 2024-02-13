@@ -1,19 +1,43 @@
 package petri
 
 import (
-	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
-	"github.com/stretchr/testify/suite"
-	"go.uber.org/zap"
-	petritypes "github.com/skip-mev/petri/core/v2/types"
-	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
-	"github.com/skip-mev/petri/cosmos/v2/loadtest"
 	"context"
 	"fmt"
 	"os"
 	"strings"
 
+	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
+	petritypes "github.com/skip-mev/petri/core/v2/types"
+	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
+	"github.com/skip-mev/petri/cosmos/v2/loadtest"
+	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
+
+	evidencemodule "cosmossdk.io/x/evidence"
+	feegrantmodule "cosmossdk.io/x/feegrant/module"
+	"cosmossdk.io/x/upgrade"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
+	"github.com/cosmos/cosmos-sdk/x/bank"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	"github.com/cosmos/cosmos-sdk/x/consensus"
+	"github.com/cosmos/cosmos-sdk/x/crisis"
+	distr "github.com/cosmos/cosmos-sdk/x/distribution"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	"github.com/cosmos/cosmos-sdk/x/gov"
+	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
+	"github.com/cosmos/cosmos-sdk/x/params"
+	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
+	"github.com/cosmos/cosmos-sdk/x/staking"
+	"github.com/cosmos/ibc-go/modules/capability"
+	ica "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts"
+	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
+	ibc "github.com/cosmos/ibc-go/v8/modules/core"
+	custommodule "github.com/dydxprotocol/v4-chain/protocol/app/module"
 	assetsmodule "github.com/dydxprotocol/v4-chain/protocol/x/assets"
 	blocktimemodule "github.com/dydxprotocol/v4-chain/protocol/x/blocktime"
 	bridgemodule "github.com/dydxprotocol/v4-chain/protocol/x/bridge"
@@ -30,29 +54,6 @@ import (
 	statsmodule "github.com/dydxprotocol/v4-chain/protocol/x/stats"
 	subaccountsmodule "github.com/dydxprotocol/v4-chain/protocol/x/subaccounts"
 	vestmodule "github.com/dydxprotocol/v4-chain/protocol/x/vest"
-	evidencemodule "cosmossdk.io/x/evidence"
-	feegrantmodule "cosmossdk.io/x/feegrant/module"
-	"cosmossdk.io/x/upgrade"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
-	"github.com/cosmos/cosmos-sdk/x/bank"
-	"github.com/cosmos/cosmos-sdk/x/consensus"
-	"github.com/cosmos/cosmos-sdk/x/crisis"
-	distr "github.com/cosmos/cosmos-sdk/x/distribution"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-	"github.com/cosmos/cosmos-sdk/x/gov"
-	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
-	"github.com/cosmos/cosmos-sdk/x/params"
-	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
-	"github.com/cosmos/cosmos-sdk/x/staking"
-	"github.com/cosmos/ibc-go/modules/capability"
-	ica "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts"
-	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
-	ibc "github.com/cosmos/ibc-go/v8/modules/core"
-	custommodule "github.com/dydxprotocol/v4-chain/protocol/app/module"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
 const (
@@ -83,7 +84,7 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 	s.Require().NoError(err)
 
 	// create the chain
-	s.chain, err = GetChain(context.Background(), s.logger)
+	s.chain, err = GetChain(context.Background(), s.logger, *s.spec)
 	s.Require().NoError(err)
 
 	//initialize the chain
@@ -116,7 +117,7 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 			Seeder:                cosmosutil.NewInteractingWallet(s.chain, s.chain.GetFaucetWallet(), encCfg),
 			WalletConfig:          s.spec.WalletConfig,
 			AmountToSend:          1000000000,
-			SkipSequenceIncrement: false,
+			SkipSequenceIncrement: true,
 			EncodingConfig:        encCfg,
 			MsgGenerator:          s.genMsg,
 		},
@@ -199,15 +200,17 @@ func getModuleBasics() module.BasicManager {
 }
 
 func (s *SlinkyIntegrationSuite) genMsg(senderAddress []byte) ([]sdk.Msg, petritypes.GasSettings, error) {
+	address := sdk.MustBech32ifyAddressBytes(prefix, senderAddress)
+
 	return []sdk.Msg{
 			&banktypes.MsgSend{
-				FromAddress: string(senderAddress),
-				ToAddress:   "cosmos1qy3523p8x9z0j6z3qg3y7t4v6gj6z9q8r9m9x5",
-				Amount:      sdk.NewCoins(sdk.NewInt64Coin("stake", 1)),
+				FromAddress: address,
+				ToAddress:   address,
+				Amount:      sdk.NewCoins(sdk.NewInt64Coin("dv4tnt", 1)),
 			},
 		}, petritypes.GasSettings{
 			Gas:         200000,
-			GasDenom:    "stake",
+			GasDenom:    "dv4tnt",
 			PricePerGas: 0,
 		}, nil
 }
