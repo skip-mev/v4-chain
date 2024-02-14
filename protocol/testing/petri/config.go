@@ -2,6 +2,7 @@ package petri
 
 import (
 	"context"
+	"fmt"
 	"math/big"
 
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
@@ -17,6 +18,9 @@ import (
 const (
 	denom =  "dv4tnt"
 	prefix = "dydx"
+	homeDir = "/petri-test"
+	appConfigPath = "config/app.toml"
+	oraclePort = 8080
 ) 
 
 func GetChainConfig() petritypes.ChainConfig {
@@ -41,9 +45,9 @@ func GetChainConfig() petritypes.ChainConfig {
 		GasAdjustment:  1.5,
 		Bech32Prefix:   prefix,
 		EncodingConfig: encoding.GetTestEncodingCfg(),
-		HomeDir:        "/petri-test",
-		SidecarHomeDir: "/petri-test",
-		SidecarPorts:   []string{"8080"},
+		HomeDir:        homeDir,
+		SidecarHomeDir: homeDir,
+		SidecarPorts:   []string{fmt.Sprintf("%d", oraclePort)},
 		CoinType:       "118",
 		ChainId:        "dydx-1",
 		ModifyGenesis:  GetGenesisModifier(),

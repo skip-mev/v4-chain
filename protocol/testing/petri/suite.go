@@ -1,11 +1,13 @@
 package petri
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
 	"strings"
-
+	"text/template"
+	"time"
 	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
@@ -38,6 +40,7 @@ import (
 	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
 	custommodule "github.com/dydxprotocol/v4-chain/protocol/app/module"
+	dydxappconfig "github.com/dydxprotocol/v4-chain/protocol/cmd/dydxprotocold/cmd"
 	assetsmodule "github.com/dydxprotocol/v4-chain/protocol/x/assets"
 	blocktimemodule "github.com/dydxprotocol/v4-chain/protocol/x/blocktime"
 	bridgemodule "github.com/dydxprotocol/v4-chain/protocol/x/bridge"
@@ -54,6 +57,7 @@ import (
 	statsmodule "github.com/dydxprotocol/v4-chain/protocol/x/stats"
 	subaccountsmodule "github.com/dydxprotocol/v4-chain/protocol/x/subaccounts"
 	vestmodule "github.com/dydxprotocol/v4-chain/protocol/x/vest"
+	petrinode "github.com/skip-mev/petri/cosmos/v2/node"
 )
 
 const (
@@ -90,15 +94,56 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 	//initialize the chain
 	err = s.chain.Init(context.Background())
 	s.Require().NoError(err)
+
+	// update oracle configs on each node
+	for _, node := range s.chain.GetValidators() {
+		err := updateOracleConfigOnNode(node.(*petrinode.Node))
+		s.Require().NoError(err)
+	}
+	time.Sleep(5 * time.Second)
+}
+
+func updateOracleConfigOnNode(node *petrinode.Node) error {
+	templateStr, cfg := dydxappconfig.InitAppConfig()
+
+	host, err := node.Sidecars[0].GetIP(context.Background())
+
+	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%d", host, oraclePort)
+	cfg.MinGasPrices = fmt.Sprintf("0%s", denom)
+
+	// create oracle template
+	tmpl, err := template.New("oracle").Parse(templateStr)
+	if err != nil {
+		return err
+	}
+
+	// write the app-config back to the node
+	var buf bytes.Buffer
+	err = tmpl.Execute(&buf, cfg)
+	if err != nil {
+		return err
+	}
+
+	if err := node.WriteFile(context.Background(), appConfigPath, buf.Bytes()); err != nil {
+		return err
+	}
+
+	// restart the node
+	if err := node.Task.Stop(context.Background(), true); err != nil {
+		return err
+	}
+
+	return node.Task.Start(context.Background(), true)
 }
 
 func (s *SlinkyIntegrationSuite) TearDownSuite() {
 	// get the oracle integration-test suite keep alive env
-	if ok := os.Getenv(envKeepAlive); ok == "" {
+	if ok := os.Getenv(envKeepAlive); ok != "" {
 		return
 	}
 	err := s.chain.Teardown(context.Background())
 	s.Require().NoError(err)
+	s.T().Log("chain teardown complete")
 }
 
 func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {

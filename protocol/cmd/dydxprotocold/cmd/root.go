@@ -134,7 +134,7 @@ func NewRootCmdWithInterceptors(
 				return err
 			}
 
-			customAppTemplate, customAppConfig := appConfigInterceptor(initAppConfig())
+			customAppTemplate, customAppConfig := appConfigInterceptor(InitAppConfig())
 			customTMConfig := initTendermintConfig()
 
 			if err := server.InterceptConfigsPreRunHandler(

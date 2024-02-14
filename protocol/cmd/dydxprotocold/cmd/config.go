@@ -26,14 +26,14 @@ const (
 // DydxAppConfig specifies dYdX app specific config.
 type DydxAppConfig struct {
 	serverconfig.Config
-	Oracle oracleconfig.AppConfig `mapstructure:"oracle"`
+	Oracle oracleconfig.AppConfig `mapstructure:"oracle", toml:"oracle"`
 }
 
 // TODO(DEC-1718): Audit tendermint and app config parameters for mainnet.
 
 // initAppConfig helps to override default appConfig template and configs.
 // return "", nil if no custom configuration is required for the application.
-func initAppConfig() (string, *DydxAppConfig) {
+func InitAppConfig() (string, *DydxAppConfig) {
 	// Optionally allow the chain developer to overwrite the SDK's default
 	// server config.
 	srvCfg := serverconfig.DefaultConfig()

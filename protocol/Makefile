@@ -437,4 +437,7 @@ loadtest-build:
 
 loadtest-run:
 	@echo "Running loadtest at commit ${GIT_COMMIT_HASH}"
-	go test -v -race ./testing/petri/...
+	cd testing/petri && go test -v -race ./
+	@echo "Loadtest finished, cleaning up containers"
+	docker rm -f $(shell docker ps -a -q | grep busybox:latest)
+	docker volume rm $(shell docker volume ls -q --filter dangling=true)
