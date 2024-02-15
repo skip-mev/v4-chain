@@ -8,7 +8,9 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
 	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
+	"github.com/pelletier/go-toml"
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
 	"github.com/skip-mev/petri/cosmos/v2/loadtest"
@@ -57,7 +59,11 @@ import (
 	statsmodule "github.com/dydxprotocol/v4-chain/protocol/x/stats"
 	subaccountsmodule "github.com/dydxprotocol/v4-chain/protocol/x/subaccounts"
 	vestmodule "github.com/dydxprotocol/v4-chain/protocol/x/vest"
+	"github.com/skip-mev/petri/core/v2/provider"
 	petrinode "github.com/skip-mev/petri/cosmos/v2/node"
+	oracleconfig "github.com/skip-mev/slinky/oracle/config"
+	"github.com/skip-mev/slinky/providers/apis/coingecko"
+	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
 )
 
 const (
@@ -97,16 +103,93 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 
 	// update oracle configs on each node
 	for _, node := range s.chain.GetValidators() {
-		err := updateOracleConfigOnNode(node.(*petrinode.Node))
-		s.Require().NoError(err)
+		s.Require().NoError(updateOracleConfigOnNode(node.(*petrinode.Node)))
+
+		// update oracle configs
+		s.Require().NoError(updateOracleConfig(node.GetTask().Sidecars[0]))
 	}
-	time.Sleep(5 * time.Second)
+}
+
+func updateOracleConfig(oracle *provider.Task) error {
+	// get the current config
+	ctx := context.Background()
+	cfgBz, err := oracle.ReadFile(ctx, oracleConfigPath)
+	if err != nil {
+		return err
+	}
+
+	// unmarshal into config
+	var cfg oracleconfig.OracleConfig
+	if err := toml.Unmarshal(cfgBz, &cfg); err != nil {
+		return err
+	}
+
+	apiConfig := coingecko.DefaultAPIConfig
+	apiConfig.Interval = 1 * time.Minute
+
+	// update config for coingecko API
+	cfg.Providers = []oracleconfig.ProviderConfig{
+		{
+			Name: coingecko.Name,
+			API:  apiConfig,
+			Market: oracleconfig.MarketConfig{
+				Name: coingecko.Name,
+				CurrencyPairToMarketConfigs: make(map[string]oracleconfig.CurrencyPairMarketConfig),
+			},
+		},
+	}
+
+	// set the market-config in accordance with the given base/quote pairs
+	for _, base := range bases {
+		for _, quote := range quotes {
+			cp := oracletypes.NewCurrencyPair(strings.ToUpper(base), strings.ToUpper(quote))
+
+			cfg.Providers[0].Market.CurrencyPairToMarketConfigs[cp.String()] = oracleconfig.CurrencyPairMarketConfig{
+				Ticker: cp.String(),
+				CurrencyPair: cp,
+			}
+
+			cfg.Market.Feeds[cp.String()] = oracleconfig.FeedConfig{
+				CurrencyPair: cp,
+			}
+
+			cfg.Market.AggregatedFeeds[cp.String()] = oracleconfig.AggregateFeedConfig{
+				CurrencyPair: cp,
+				Conversions: []oracleconfig.Conversions{
+					{
+						{
+							CurrencyPair: cp,
+						},
+					},
+				},
+			}
+		}
+	}
+
+	bz, err := toml.Marshal(cfg)
+	if err != nil {
+		return err
+	}
+
+	if err := oracle.WriteFile(ctx, oracleConfigPath, bz); err != nil {
+		return err
+	}
+
+	// restart oracle
+	if err := oracle.Stop(ctx, true); err != nil {
+		return err
+	}
+
+	return oracle.Start(ctx, true)
 }
 
 func updateOracleConfigOnNode(node *petrinode.Node) error {
 	templateStr, cfg := dydxappconfig.InitAppConfig()
 
 	host, err := node.Sidecars[0].GetIP(context.Background())
+	if err != nil {
+		return err
+	}
 
 	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%d", host, oraclePort)
 	cfg.MinGasPrices = fmt.Sprintf("0%s", denom)

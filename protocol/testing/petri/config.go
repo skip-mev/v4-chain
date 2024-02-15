@@ -20,8 +20,21 @@ const (
 	prefix = "dydx"
 	homeDir = "/petri-test"
 	appConfigPath = "config/app.toml"
+	oracleConfigPath = "oracle.toml"
 	oraclePort = 8080
-) 
+	
+)
+var (
+	bases = [30]string{
+		"ETHEREUM", "COSMOS", "BITCOIN", "POLKADOT", "RIPPLE", "USD", "DAI", "CARDANO", "SOLANA", "DOGECOIN", "EOS", "BINANCECOIN",
+		"MOG-COIN", "HARRYPOTTEROBAMASONIC10INU", "APTOS", "SHIBA-INU", "FILECOIN", "OPTIMISM", "TAO", "DYDX", "TEZOS", "PEPE",
+		"1INCH", "OSMOSIS", "BLUR", "WORLDCOIN", "TIA", "CELO", "HELIUM", "CANTO",
+	}
+	quotes = [35]string{"btc","eth","ltc","bch","bnb","eos","xrp","xlm","link","dot","yfi","usd","aed",
+		"ars","aud","bdt","bhd","bmd","brl","cad","chf","clp","cny","czk","dkk","eur","gbp","hkd","huf",
+		"idr","ils","inr","jpy","krw","kwd",
+	}
+)
 
 func GetChainConfig() petritypes.ChainConfig {
 	return petritypes.ChainConfig{
@@ -46,7 +59,7 @@ func GetChainConfig() petritypes.ChainConfig {
 		Bech32Prefix:   prefix,
 		EncodingConfig: encoding.GetTestEncodingCfg(),
 		HomeDir:        homeDir,
-		SidecarHomeDir: homeDir,
+		SidecarHomeDir: "/etc",
 		SidecarPorts:   []string{fmt.Sprintf("%d", oraclePort)},
 		CoinType:       "118",
 		ChainId:        "dydx-1",
