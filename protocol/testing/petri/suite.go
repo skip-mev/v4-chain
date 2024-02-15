@@ -133,7 +133,7 @@ func updateOracleConfig(oracle *provider.Task) error {
 			Name: coingecko.Name,
 			API:  apiConfig,
 			Market: oracleconfig.MarketConfig{
-				Name: coingecko.Name,
+				Name:                        coingecko.Name,
 				CurrencyPairToMarketConfigs: make(map[string]oracleconfig.CurrencyPairMarketConfig),
 			},
 		},
@@ -145,7 +145,7 @@ func updateOracleConfig(oracle *provider.Task) error {
 			cp := oracletypes.NewCurrencyPair(strings.ToUpper(base), strings.ToUpper(quote))
 
 			cfg.Providers[0].Market.CurrencyPairToMarketConfigs[cp.String()] = oracleconfig.CurrencyPairMarketConfig{
-				Ticker: cp.String(),
+				Ticker:       cp.String(),
 				CurrencyPair: cp,
 			}
 

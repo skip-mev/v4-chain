@@ -16,23 +16,23 @@ import (
 )
 
 const (
-	denom =  "dv4tnt"
-	prefix = "dydx"
-	homeDir = "/petri-test"
-	appConfigPath = "config/app.toml"
+	denom            = "dv4tnt"
+	prefix           = "dydx"
+	homeDir          = "/petri-test"
+	appConfigPath    = "config/app.toml"
 	oracleConfigPath = "oracle.toml"
-	oraclePort = 8080
-	
+	oraclePort       = 8080
 )
+
 var (
 	bases = [30]string{
 		"ETHEREUM", "COSMOS", "BITCOIN", "POLKADOT", "RIPPLE", "USD", "DAI", "CARDANO", "SOLANA", "DOGECOIN", "EOS", "BINANCECOIN",
 		"MOG-COIN", "HARRYPOTTEROBAMASONIC10INU", "APTOS", "SHIBA-INU", "FILECOIN", "OPTIMISM", "TAO", "DYDX", "TEZOS", "PEPE",
 		"1INCH", "OSMOSIS", "BLUR", "WORLDCOIN", "TIA", "CELO", "HELIUM", "CANTO",
 	}
-	quotes = [35]string{"btc","eth","ltc","bch","bnb","eos","xrp","xlm","link","dot","yfi","usd","aed",
-		"ars","aud","bdt","bhd","bmd","brl","cad","chf","clp","cny","czk","dkk","eur","gbp","hkd","huf",
-		"idr","ils","inr","jpy","krw","kwd",
+	quotes = [35]string{"btc", "eth", "ltc", "bch", "bnb", "eos", "xrp", "xlm", "link", "dot", "yfi", "usd", "aed",
+		"ars", "aud", "bdt", "bhd", "bmd", "brl", "cad", "chf", "clp", "cny", "czk", "dkk", "eur", "gbp", "hkd", "huf",
+		"idr", "ils", "inr", "jpy", "krw", "kwd",
 	}
 )
 
@@ -53,7 +53,7 @@ func GetChainConfig() petritypes.ChainConfig {
 			UID:   "1000",
 			GID:   "1000",
 		},
-		SidecarArgs: []string{"slinky", "--oracle-config-path", "/etc/oracle.toml", "-host", "0.0.0.0", "-port", "8080"},
+		SidecarArgs:    []string{"slinky", "--oracle-config-path", "/etc/oracle.toml", "-host", "0.0.0.0", "-port", "8080"},
 		GasPrices:      "0dv4tnt",
 		GasAdjustment:  1.5,
 		Bech32Prefix:   prefix,
@@ -71,9 +71,9 @@ func GetChainConfig() petritypes.ChainConfig {
 			HDPath:           hd.CreateHDPath(0, 0, 0),
 			SigningAlgorithm: "secp256k1",
 		},
-		NodeCreator:          node.CreateNode,
+		NodeCreator:       node.CreateNode,
 		GenesisDelegation: big.NewInt(10_000_000_000_000),
-		GenesisBalance: big.NewInt(100_000_000_000_000),
+		GenesisBalance:    big.NewInt(100_000_000_000_000),
 	}
 }
 
@@ -113,7 +113,7 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 		},
 		{
 			Key:   "app_state.staking.params.bond_denom",
-			Value: denom, 
+			Value: denom,
 		},
 	}
 	return chain.ModifyGenesis(genKVs)
