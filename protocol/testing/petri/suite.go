@@ -2,12 +2,13 @@ package petri
 
 import (
 	"bytes"
+	"time"
 	"context"
 	"fmt"
+	"encoding/json"
 	"os"
 	"strings"
 	"text/template"
-	"time"
 
 	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
 	"github.com/pelletier/go-toml"
@@ -62,12 +63,15 @@ import (
 	"github.com/skip-mev/petri/core/v2/provider"
 	petrinode "github.com/skip-mev/petri/cosmos/v2/node"
 	oracleconfig "github.com/skip-mev/slinky/oracle/config"
-	"github.com/skip-mev/slinky/providers/apis/coingecko"
+	"github.com/skip-mev/slinky/providers/websockets/gate"
 	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	"os/signal"
+	"syscall"
 )
 
 const (
-	envKeepAlive = "PETRI_ENV_KEEP_ALIVE"
+	envKeepAlive = "PETRI_LOAD_TEST_KEEP_ALIVE"
+	marketsPath = "./fixtures/markets.json"
 )
 
 // SlinkyIntegrationSuite is a test-suite used to spin up load-tests of arbitrary size for dydx nodes
@@ -101,16 +105,19 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 	err = s.chain.Init(context.Background())
 	s.Require().NoError(err)
 
+	cps, err := getAllCurrencyPairs()
+	s.Require().NoError(err)
+
 	// update oracle configs on each node
 	for _, node := range s.chain.GetValidators() {
 		s.Require().NoError(updateOracleConfigOnNode(node.(*petrinode.Node)))
 
 		// update oracle configs
-		s.Require().NoError(updateOracleConfig(node.GetTask().Sidecars[0]))
+		s.Require().NoError(updateOracleConfig(node.GetTask().Sidecars[0], cps))
 	}
 }
 
-func updateOracleConfig(oracle *provider.Task) error {
+func updateOracleConfig(oracle *provider.Task, cps []oracletypes.CurrencyPair) error {
 	// get the current config
 	ctx := context.Background()
 	cfgBz, err := oracle.ReadFile(ctx, oracleConfigPath)
@@ -124,45 +131,45 @@ func updateOracleConfig(oracle *provider.Task) error {
 		return err
 	}
 
-	apiConfig := coingecko.DefaultAPIConfig
-	apiConfig.Interval = 1 * time.Minute
+	cfg.Metrics = oracleconfig.MetricsConfig{
+		Enabled: true,
+		PrometheusServerAddress: fmt.Sprintf("%s:%s", "0.0.0.0", oracleMetricsPort),
+	}
+	cfg.Production = true
+	cfg.UpdateInterval = 1 * time.Second
+	cfg.MaxPriceAge = 2 * time.Minute
 
-	// update config for coingecko API
+	// update config for coingecko API	
 	cfg.Providers = []oracleconfig.ProviderConfig{
 		{
-			Name: coingecko.Name,
-			API:  apiConfig,
+			Name: gate.Name,
+			WebSocket: gate.DefaultWebSocketConfig,
 			Market: oracleconfig.MarketConfig{
-				Name:                        coingecko.Name,
+				Name:                        gate.Name,
 				CurrencyPairToMarketConfigs: make(map[string]oracleconfig.CurrencyPairMarketConfig),
 			},
 		},
 	}
-
 	// set the market-config in accordance with the given base/quote pairs
-	for _, base := range bases {
-		for _, quote := range quotes {
-			cp := oracletypes.NewCurrencyPair(strings.ToUpper(base), strings.ToUpper(quote))
+	for _, cp := range cps {
+		cfg.Providers[0].Market.CurrencyPairToMarketConfigs[cp.String()] = oracleconfig.CurrencyPairMarketConfig{
+			Ticker:       fmt.Sprintf("%s_%s", cp.Base, cp.Quote),
+			CurrencyPair: cp,
+		}
 
-			cfg.Providers[0].Market.CurrencyPairToMarketConfigs[cp.String()] = oracleconfig.CurrencyPairMarketConfig{
-				Ticker:       cp.String(),
-				CurrencyPair: cp,
-			}
+		cfg.Market.Feeds[cp.String()] = oracleconfig.FeedConfig{
+			CurrencyPair: cp,
+		}
 
-			cfg.Market.Feeds[cp.String()] = oracleconfig.FeedConfig{
-				CurrencyPair: cp,
-			}
-
-			cfg.Market.AggregatedFeeds[cp.String()] = oracleconfig.AggregateFeedConfig{
-				CurrencyPair: cp,
-				Conversions: []oracleconfig.Conversions{
+		cfg.Market.AggregatedFeeds[cp.String()] = oracleconfig.AggregateFeedConfig{
+			CurrencyPair: cp,
+			Conversions: []oracleconfig.Conversions{
+				{
 					{
-						{
-							CurrencyPair: cp,
-						},
+						CurrencyPair: cp,
 					},
 				},
-			}
+			},
 		}
 	}
 
@@ -186,12 +193,12 @@ func updateOracleConfig(oracle *provider.Task) error {
 func updateOracleConfigOnNode(node *petrinode.Node) error {
 	templateStr, cfg := dydxappconfig.InitAppConfig()
 
-	host, err := node.Sidecars[0].GetIP(context.Background())
+	oracleHost, err := node.GetTask().Sidecars[0].GetIP(context.Background())
 	if err != nil {
 		return err
 	}
 
-	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%d", host, oraclePort)
+	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%s", oracleHost, oraclePort)
 	cfg.MinGasPrices = fmt.Sprintf("0%s", denom)
 
 	// create oracle template
@@ -220,9 +227,13 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 }
 
 func (s *SlinkyIntegrationSuite) TearDownSuite() {
+	// create signal channels to block on interrupt
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM) // block on term / interrupt signals
+
 	// get the oracle integration-test suite keep alive env
 	if ok := os.Getenv(envKeepAlive); ok != "" {
-		return
+		<-sigCh
 	}
 	err := s.chain.Teardown(context.Background())
 	s.Require().NoError(err)
@@ -341,4 +352,20 @@ func (s *SlinkyIntegrationSuite) genMsg(senderAddress []byte) ([]sdk.Msg, petrit
 			GasDenom:    "dv4tnt",
 			PricePerGas: 0,
 		}, nil
+}
+
+func getAllCurrencyPairs() ([]oracletypes.CurrencyPair, error) {
+	// read the json fixture for all currency-pairs to report for
+	file, err := os.ReadFile(marketsPath)
+	if err != nil {
+		return nil, err
+	}
+
+	var pairs []oracletypes.CurrencyPair
+	err = json.Unmarshal(file, &pairs)
+	if err != nil {
+		return nil, err
+	}
+
+	return pairs, nil
 }

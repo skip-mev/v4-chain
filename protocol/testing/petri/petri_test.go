@@ -8,6 +8,9 @@ import (
 
 // runs the slinky integration tests
 func TestSlinkyIntegration(t *testing.T) {
-	chainCfg := petri.GetChainConfig()
+	chainCfg, err := petri.GetChainConfig()
+	if err != nil {
+		t.Fatal(err)
+	}
 	suite.Run(t, petri.NewSlinkyIntegrationSuite(&chainCfg))
 }

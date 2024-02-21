@@ -5,6 +5,7 @@ HTTPS_GIT := https://github.com/dydxprotocol/v4.git
 GO_VERSION := $(shell cat go.mod | grep -E 'go [0-9].[0-9]+' | cut -d ' ' -f 2)
 PROJECT_NAME := $(shell git remote get-url origin | xargs basename -s .git)
 CGO_ENABLED=1
+SLINKY_REF=main
 export GIT_COMMIT_HASH=$(shell git rev-parse --short HEAD)
 export COMMIT=$(shell git rev-parse HEAD)
 
@@ -433,7 +434,7 @@ check-sample-pregenesis-up-to-date:
 ###############################################################################
 loadtest-build:
 	@echo "Build loadtest test image at commit ${GIT_COMMIT_HASH}"
-	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) . -t dydxprotocol-base --no-cache --build-arg BUILD_TAGS="netgo,ledger,muslc,skip_sequence_increment_ante_handler"
+	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) --build-arg SLINKY_REF=$(SLINKY_REF) . -t dydxprotocol-base --no-cache --build-arg BUILD_TAGS="netgo,ledger,muslc,skip_sequence_increment_ante_handler"
 
 loadtest-run:
 	@echo "Running loadtest at commit ${GIT_COMMIT_HASH}"
