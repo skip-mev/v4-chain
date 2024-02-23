@@ -1471,7 +1471,7 @@ func (app *App) initOracle(appOpts servertypes.AppOptions, pricesTxDecoder proce
 	slinkyVoteExtensionsHandler := ve.NewVoteExtensionHandler(
 		app.Logger(),
 		app.oracleClient,
-		time.Second,
+		cfg.ClientTimeout,
 		currencypair.NewDefaultCurrencyPairStrategy(app.PricesKeeper),
 		compression.NewCompressionVoteExtensionCodec(
 			compression.NewDefaultVoteExtensionCodec(),

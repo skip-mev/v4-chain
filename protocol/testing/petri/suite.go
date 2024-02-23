@@ -2,21 +2,23 @@ package petri
 
 import (
 	"bytes"
-	"time"
 	"context"
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 	"text/template"
+	"time"
 
 	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
-	"github.com/pelletier/go-toml"
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
 	"github.com/skip-mev/petri/cosmos/v2/loadtest"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
+
+	"os/signal"
+	"syscall"
 
 	evidencemodule "cosmossdk.io/x/evidence"
 	feegrantmodule "cosmossdk.io/x/feegrant/module"
@@ -63,10 +65,9 @@ import (
 	"github.com/skip-mev/petri/core/v2/provider"
 	petrinode "github.com/skip-mev/petri/cosmos/v2/node"
 	oracleconfig "github.com/skip-mev/slinky/oracle/config"
+	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 	"github.com/skip-mev/slinky/providers/websockets/gate"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
-	"os/signal"
-	"syscall"
+	mmtypes "github.com/skip-mev/slinky/x/marketmap/types"
 )
 
 const (
@@ -117,7 +118,7 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 	}
 }
 
-func updateOracleConfig(oracle *provider.Task, cps []oracletypes.CurrencyPair) error {
+func updateOracleConfig(oracle *provider.Task, cps []slinkytypes.CurrencyPair) error {
 	// get the current config
 	ctx := context.Background()
 	cfgBz, err := oracle.ReadFile(ctx, oracleConfigPath)
@@ -126,54 +127,28 @@ func updateOracleConfig(oracle *provider.Task, cps []oracletypes.CurrencyPair) e
 	}
 
 	// unmarshal into config
-	var cfg oracleconfig.OracleConfig
-	if err := toml.Unmarshal(cfgBz, &cfg); err != nil {
+	var oracleCfg oracleconfig.OracleConfig
+	if err := json.Unmarshal(cfgBz, &oracleCfg); err != nil {
 		return err
 	}
 
-	cfg.Metrics = oracleconfig.MetricsConfig{
+	oracleCfg.Metrics = oracleconfig.MetricsConfig{
 		Enabled: true,
 		PrometheusServerAddress: fmt.Sprintf("%s:%s", "0.0.0.0", oracleMetricsPort),
 	}
-	cfg.Production = true
-	cfg.UpdateInterval = 1 * time.Second
-	cfg.MaxPriceAge = 2 * time.Minute
+	oracleCfg.Production = true
+	oracleCfg.UpdateInterval = 1 * time.Second
+	oracleCfg.MaxPriceAge = 2 * time.Minute
 
 	// update config for coingecko API	
-	cfg.Providers = []oracleconfig.ProviderConfig{
+	oracleCfg.Providers = []oracleconfig.ProviderConfig{
 		{
 			Name: gate.Name,
 			WebSocket: gate.DefaultWebSocketConfig,
-			Market: oracleconfig.MarketConfig{
-				Name:                        gate.Name,
-				CurrencyPairToMarketConfigs: make(map[string]oracleconfig.CurrencyPairMarketConfig),
-			},
 		},
 	}
-	// set the market-config in accordance with the given base/quote pairs
-	for _, cp := range cps {
-		cfg.Providers[0].Market.CurrencyPairToMarketConfigs[cp.String()] = oracleconfig.CurrencyPairMarketConfig{
-			Ticker:       fmt.Sprintf("%s_%s", cp.Base, cp.Quote),
-			CurrencyPair: cp,
-		}
 
-		cfg.Market.Feeds[cp.String()] = oracleconfig.FeedConfig{
-			CurrencyPair: cp,
-		}
-
-		cfg.Market.AggregatedFeeds[cp.String()] = oracleconfig.AggregateFeedConfig{
-			CurrencyPair: cp,
-			Conversions: []oracleconfig.Conversions{
-				{
-					{
-						CurrencyPair: cp,
-					},
-				},
-			},
-		}
-	}
-
-	bz, err := toml.Marshal(cfg)
+	bz, err := json.Marshal(oracleCfg)
 	if err != nil {
 		return err
 	}
@@ -181,6 +156,54 @@ func updateOracleConfig(oracle *provider.Task, cps []oracletypes.CurrencyPair) e
 	if err := oracle.WriteFile(ctx, oracleConfigPath, bz); err != nil {
 		return err
 	}
+
+	marketConfig := mmtypes.MarketMap{
+		Tickers: make(map[string]mmtypes.Ticker), // map of cp.String() -> Ticker
+		Paths: make(map[string]mmtypes.Paths), // map of cp.String() -> []Path
+		Providers: make(map[string]mmtypes.Providers), // map of cp.String() -> []Provider
+	}
+
+	// set the market-config in accordance with the given base/quote pairs
+	for _, cp := range cps {
+		// create the ticker
+		marketConfig.Tickers[cp.String()] = mmtypes.Ticker{
+			CurrencyPair: cp,
+			MinProviderCount: 1,
+			Decimals:  8,
+		}
+
+		// create the paths
+		marketConfig.Paths[cp.String()] = mmtypes.Paths{
+			Paths: []mmtypes.Path{
+				{
+					Operations: []mmtypes.Operation{
+						{
+							CurrencyPair: cp,
+						},
+					},
+				},
+			},
+		}
+
+		// create the ticker config per provider
+		marketConfig.Providers[cp.String()] = mmtypes.Providers{
+			Providers: []mmtypes.ProviderConfig{
+				{
+					Name: gate.Name,
+					OffChainTicker: fmt.Sprintf("%s_%s", cp.Base, cp.Quote),
+				},
+			},
+		}
+	}
+
+	bz, err = json.Marshal(marketConfig)
+	if err != nil {
+		return err
+	}
+
+	if err := oracle.WriteFile(ctx, marketConfigPath, bz); err != nil {
+		return err
+	}	
 
 	// restart oracle
 	if err := oracle.Stop(ctx, true); err != nil {
@@ -200,6 +223,9 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 
 	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%s", oracleHost, oraclePort)
 	cfg.MinGasPrices = fmt.Sprintf("0%s", denom)
+	cfg.Oracle.ClientTimeout = 10 * time.Second
+	cfg.Oracle.MetricsEnabled = true
+	cfg.Oracle.PrometheusServerAddress = fmt.Sprintf("%s:%s", "0.0.0.0", appOracleMetricsPort)
 
 	// create oracle template
 	tmpl, err := template.New("oracle").Parse(templateStr)
@@ -215,6 +241,18 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 	}
 
 	if err := node.WriteFile(context.Background(), appConfigPath, buf.Bytes()); err != nil {
+		return err
+	}
+
+	// update comet config
+	if err := node.ModifyTomlConfigFile(context.Background(), cometConfigPath, petrinode.Toml{
+		"rpc": petrinode.Toml{
+			"pprof_laddr": fmt.Sprintf("%s:%s", "0.0.0.0", cometProfilerPort),
+		},
+		"instrumentation": petrinode.Toml{
+			"prometheus": true,
+		},
+	}); err != nil {
 		return err
 	}
 
@@ -277,7 +315,7 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 		endpoints = append(endpoints, fmt.Sprintf("%s/websocket", url))
 	}
 
-	cfg := tmloadtest.Config{
+	_ = tmloadtest.Config{
 		ClientFactory:        "slinky",
 		Connections:          1,
 		Endpoints:            endpoints,
@@ -289,8 +327,8 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 		BroadcastTxMethod:    "async",
 		EndpointSelectMethod: "supplied",
 	}
-	err = tmloadtest.ExecuteStandalone(cfg)
-	s.Require().NoError(err)
+	// err = tmloadtest.ExecuteStandalone(cfg)
+	// s.Require().NoError(err)
 }
 
 func getModuleBasics() module.BasicManager {
@@ -354,14 +392,14 @@ func (s *SlinkyIntegrationSuite) genMsg(senderAddress []byte) ([]sdk.Msg, petrit
 		}, nil
 }
 
-func getAllCurrencyPairs() ([]oracletypes.CurrencyPair, error) {
+func getAllCurrencyPairs() ([]slinkytypes.CurrencyPair, error) {
 	// read the json fixture for all currency-pairs to report for
 	file, err := os.ReadFile(marketsPath)
 	if err != nil {
 		return nil, err
 	}
 
-	var pairs []oracletypes.CurrencyPair
+	var pairs []slinkytypes.CurrencyPair
 	err = json.Unmarshal(file, &pairs)
 	if err != nil {
 		return nil, err

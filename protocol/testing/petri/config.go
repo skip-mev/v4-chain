@@ -24,9 +24,13 @@ const (
 	prefix           = "dydx"
 	homeDir          = "/petri-test"
 	appConfigPath    = "config/app.toml"
-	oracleConfigPath = "oracle.toml"
+	cometConfigPath  = "config/config.toml"
+	oracleConfigPath = "oracle.json"
+	marketConfigPath = "market.json"
 	oraclePort       = "8080"
 	oracleMetricsPort = "8010"
+	appOracleMetricsPort = "26661"
+	cometProfilerPort = "6060"
 	envProviderType = "PETRI_LOAD_TEST_PROVIDER_TYPE"
 	envDigitalOceanAPIKey = "PETRI_LOAD_TEST_DIGITAL_OCEAN_API_KEY"
 	digitalOceanProviderType = "digitalocean"
@@ -63,7 +67,13 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 			UID:   "1000",
 			GID:   "1000",
 		},
-		SidecarArgs:    []string{"slinky", "--oracle-config-path", "/etc/oracle.toml", "-host", "0.0.0.0", "-port", "8080"},
+		SidecarArgs:    []string{
+			"slinky", 
+			"--oracle-config-path", fmt.Sprintf("/etc/%s", oracleConfigPath), 
+			"--market-config-path", fmt.Sprintf("/etc/%s", marketConfigPath), 
+			"-host", "0.0.0.0", 
+			"-port", "8080",
+		},
 		GasPrices:      "0dv4tnt",
 		GasAdjustment:  1.5,
 		Bech32Prefix:   prefix,

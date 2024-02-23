@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/dydxprotocol/v4-chain/protocol/testutil/constants"
@@ -39,7 +39,7 @@ func TestIDForCurrencyPair(t *testing.T) {
 	marketParams := keeper.GetAllMarketParams(ctx)
 	require.Equal(t, len(marketParams), marketNumber)
 	for i := 0; i < marketNumber; i++ {
-		pair := oracletypes.CurrencyPair{
+		pair := slinkytypes.CurrencyPair{
 			Base:  fmt.Sprint(i),
 			Quote: fmt.Sprint(i),
 		}
@@ -47,7 +47,7 @@ func TestIDForCurrencyPair(t *testing.T) {
 		require.True(t, found)
 		require.Equal(t, uint64(i), id)
 	}
-	_, found := keeper.GetIDForCurrencyPair(ctx, oracletypes.CurrencyPair{
+	_, found := keeper.GetIDForCurrencyPair(ctx, slinkytypes.CurrencyPair{
 		Base:  fmt.Sprint(marketNumber + 1),
 		Quote: fmt.Sprint(marketNumber + 1),
 	})
@@ -63,7 +63,7 @@ func TestGetPriceForCurrencyPair(t *testing.T) {
 	marketParams := keeper.GetAllMarketParams(ctx)
 	require.Equal(t, len(marketParams), marketNumber)
 	for i := 0; i < marketNumber; i++ {
-		pair := oracletypes.CurrencyPair{
+		pair := slinkytypes.CurrencyPair{
 			Base:  fmt.Sprint(i),
 			Quote: fmt.Sprint(i),
 		}
@@ -71,7 +71,7 @@ func TestGetPriceForCurrencyPair(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, items[i].Price.Price, price.Price.Uint64())
 	}
-	_, err := keeper.GetPriceForCurrencyPair(ctx, oracletypes.CurrencyPair{
+	_, err := keeper.GetPriceForCurrencyPair(ctx, slinkytypes.CurrencyPair{
 		Base:  fmt.Sprint(marketNumber + 1),
 		Quote: fmt.Sprint(marketNumber + 1),
 	})
@@ -97,10 +97,10 @@ func TestBadMarketData(t *testing.T) {
 	_, found := keeper.GetCurrencyPairFromID(ctx, uint64(0))
 	require.False(t, found)
 
-	_, found = keeper.GetIDForCurrencyPair(ctx, oracletypes.CurrencyPair{})
+	_, found = keeper.GetIDForCurrencyPair(ctx, slinkytypes.CurrencyPair{})
 	require.False(t, found)
 
-	_, err = keeper.GetPriceForCurrencyPair(ctx, oracletypes.CurrencyPair{})
+	_, err = keeper.GetPriceForCurrencyPair(ctx, slinkytypes.CurrencyPair{})
 	require.Error(t, err)
 }
 

@@ -11,7 +11,7 @@ import (
 	strategymock "github.com/skip-mev/slinky/abci/strategies/currencypair/mocks"
 	"github.com/skip-mev/slinky/abci/testutils"
 	vetypes "github.com/skip-mev/slinky/abci/ve/types"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 	"github.com/stretchr/testify/suite"
 	"math/big"
 	"testing"
@@ -140,14 +140,14 @@ func (suite *SlinkyPriceUpdateGeneratorSuite) TestCurrencyPairConversionFails() 
 	}
 	suite.veCodec.On("Decode", voteExtensionBz).Return(ve, nil)
 
-	mogBtc := oracletypes.NewCurrencyPair("MOG", "BTC")
+	mogBtc := slinkytypes.NewCurrencyPair("MOG", "BTC")
 	// expect an error from the vote-extension aggregator
 	suite.va.On("AggregateOracleVotes", ctx, []aggregator.Vote{
 		{
 			ConsAddress:         sdk.ConsAddress(validator),
 			OracleVoteExtension: ve,
 		},
-	}).Return(map[oracletypes.CurrencyPair]*big.Int{
+	}).Return(map[slinkytypes.CurrencyPair]*big.Int{
 		mogBtc: big.NewInt(1),
 	}, nil)
 
@@ -191,15 +191,15 @@ func (suite *SlinkyPriceUpdateGeneratorSuite) TestValidMarketPriceUpdate() {
 	}
 	suite.veCodec.On("Decode", voteExtensionBz).Return(ve, nil)
 
-	mogBtc := oracletypes.NewCurrencyPair("MOG", "BTC")
-	pepeEth := oracletypes.NewCurrencyPair("PEPE", "ETH")
+	mogBtc := slinkytypes.NewCurrencyPair("MOG", "BTC")
+	pepeEth := slinkytypes.NewCurrencyPair("PEPE", "ETH")
 	// expect an error from the vote-extension aggregator
 	suite.va.On("AggregateOracleVotes", ctx, []aggregator.Vote{
 		{
 			ConsAddress:         sdk.ConsAddress(validator),
 			OracleVoteExtension: ve,
 		},
-	}).Return(map[oracletypes.CurrencyPair]*big.Int{
+	}).Return(map[slinkytypes.CurrencyPair]*big.Int{
 		mogBtc:  big.NewInt(1),
 		pepeEth: big.NewInt(2),
 	}, nil)

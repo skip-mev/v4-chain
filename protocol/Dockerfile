@@ -63,7 +63,8 @@ RUN apk add --no-cache bash
 
 COPY --from=builder /dydxprotocol/build/dydxprotocold /bin/dydxprotocold
 COPY --from=builder /slinky/build/oracle /bin/slinky
-COPY --from=builder /slinky/config/local/oracle.toml /etc/oracle.toml
+COPY --from=builder /slinky/config/local/oracle.json /etc/oracle.json
+COPY --from=builder /slinky/config/local/market.json /etc/market.json
 
 ENV HOME /dydxprotocol
 WORKDIR $HOME
@@ -80,5 +81,11 @@ EXPOSE 9090
 EXPOSE 8080
 # oracle metrics
 EXPOSE 8010
+# tendermint prometheus metrics
+EXPOSE 26660
+# tendermint profiler endpoint
+EXPOSE 6060
+# oracle app-side metrics
+EXPOSE 26661
 
 ENTRYPOINT ["dydxprotocold"]
