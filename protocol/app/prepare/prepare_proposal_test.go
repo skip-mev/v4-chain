@@ -27,7 +27,7 @@ import (
 	strategymock "github.com/skip-mev/slinky/abci/strategies/currencypair/mocks"
 	slinkytestutils "github.com/skip-mev/slinky/abci/testutils"
 	vetypes "github.com/skip-mev/slinky/abci/ve/types"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"math/big"
@@ -583,8 +583,8 @@ func TestSlinkyPrepareProposalHandler(t *testing.T) {
 		extCommitBz, err := extCommitCodec.Encode(extCommit)
 		require.NoError(t, err)
 
-		mogBtc := oracletypes.NewCurrencyPair("MOG", "BTC")
-		tiaPepe := oracletypes.NewCurrencyPair("TIA", "PEPE")
+		mogBtc := slinkytypes.NewCurrencyPair("MOG", "BTC")
+		tiaPepe := slinkytypes.NewCurrencyPair("TIA", "PEPE")
 
 		aggMock.On("AggregateOracleVotes", ctx, []aggregator.Vote{
 			{
@@ -595,7 +595,7 @@ func TestSlinkyPrepareProposalHandler(t *testing.T) {
 				ConsAddress:         validator2,
 				OracleVoteExtension: validator2ve,
 			},
-		}).Return(map[oracletypes.CurrencyPair]*big.Int{
+		}).Return(map[slinkytypes.CurrencyPair]*big.Int{
 			mogBtc:  big.NewInt(100),
 			tiaPepe: big.NewInt(99),
 		}, nil)

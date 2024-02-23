@@ -4,26 +4,53 @@ import (
 	"context"
 	"fmt"
 	"math/big"
+	"os"
 
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/dydxprotocol/v4-chain/protocol/testutil/encoding"
+	pricestypes "github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
 	"github.com/skip-mev/petri/core/v2/provider"
 	"github.com/skip-mev/petri/core/v2/provider/docker"
+	"github.com/skip-mev/petri/core/v2/provider/digitalocean"
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/chain"
 	"github.com/skip-mev/petri/cosmos/v2/node"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 const (
-	denom =  "dv4tnt"
-	prefix = "dydx"
-	homeDir = "/petri-test"
-	appConfigPath = "config/app.toml"
-	oraclePort = 8080
-) 
+	denom            = "dv4tnt"
+	prefix           = "dydx"
+	homeDir          = "/petri-test"
+	appConfigPath    = "config/app.toml"
+	cometConfigPath  = "config/config.toml"
+	oracleConfigPath = "oracle.json"
+	marketConfigPath = "market.json"
+	oraclePort       = "8080"
+	oracleMetricsPort = "8010"
+	appOracleMetricsPort = "26661"
+	cometProfilerPort = "6060"
+	envProviderType = "PETRI_LOAD_TEST_PROVIDER_TYPE"
+	envDigitalOceanAPIKey = "PETRI_LOAD_TEST_DIGITAL_OCEAN_API_KEY"
+	digitalOceanProviderType = "digitalocean"
+	envDigitalOceanImageID = "PETRI_LOAD_TEST_DIGITAL_OCEAN_IMAGE_ID"
+	dockerProviderType = "docker"
+)
+var doRegions = []string{"blr1", "blr1", "fra1", "lon1", "ams3"}
 
-func GetChainConfig() petritypes.ChainConfig {
+func GetChainConfig() (petritypes.ChainConfig, error) {
+	// get the digital ocean image ID
+	doEnabled := os.Getenv(envProviderType) == digitalOceanProviderType
+	var doImageID int
+	if doEnabled {
+		var err error
+		doImageID, err = strconv.Atoi(os.Getenv(envDigitalOceanImageID))
+		if err != nil {
+			return petritypes.ChainConfig{}, fmt.Errorf("failed to parse digital ocean image ID: %w", err)
+		}
+	}
+
 	return petritypes.ChainConfig{
 		Denom:         denom,
 		Decimals:      6,
@@ -40,14 +67,20 @@ func GetChainConfig() petritypes.ChainConfig {
 			UID:   "1000",
 			GID:   "1000",
 		},
-		SidecarArgs: []string{"slinky", "--oracle-config-path", "/etc/oracle.toml", "-host", "0.0.0.0", "-port", "8080"},
+		SidecarArgs:    []string{
+			"slinky", 
+			"--oracle-config-path", fmt.Sprintf("/etc/%s", oracleConfigPath), 
+			"--market-config-path", fmt.Sprintf("/etc/%s", marketConfigPath), 
+			"-host", "0.0.0.0", 
+			"-port", "8080",
+		},
 		GasPrices:      "0dv4tnt",
 		GasAdjustment:  1.5,
 		Bech32Prefix:   prefix,
 		EncodingConfig: encoding.GetTestEncodingCfg(),
 		HomeDir:        homeDir,
-		SidecarHomeDir: homeDir,
-		SidecarPorts:   []string{fmt.Sprintf("%d", oraclePort)},
+		SidecarHomeDir: "/etc",
+		SidecarPorts:   []string{oraclePort, oracleMetricsPort},
 		CoinType:       "118",
 		ChainId:        "dydx-1",
 		ModifyGenesis:  GetGenesisModifier(),
@@ -58,10 +91,20 @@ func GetChainConfig() petritypes.ChainConfig {
 			HDPath:           hd.CreateHDPath(0, 0, 0),
 			SigningAlgorithm: "secp256k1",
 		},
-		NodeCreator:          node.CreateNode,
+		NodeCreator:       node.CreateNode,
 		GenesisDelegation: big.NewInt(10_000_000_000_000),
-		GenesisBalance: big.NewInt(100_000_000_000_000),
-	}
+		GenesisBalance:    big.NewInt(100_000_000_000_000),
+		NodeDefinitionModifier: func(def provider.TaskDefinition, nodeConfig petritypes.NodeConfig) provider.TaskDefinition {
+			if doEnabled {
+				def.ProviderSpecificConfig = digitalocean.DigitalOceanTaskConfig{
+					Size: "c-16",
+					Region: doRegions[nodeConfig.Index%len(doRegions)], // multiplex onto multiple regions
+					ImageID: doImageID,
+				}
+			}
+			return def
+		},
+	}, nil
 }
 
 func GetGenesisModifier() petritypes.GenesisModifier {
@@ -100,18 +143,64 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 		},
 		{
 			Key:   "app_state.staking.params.bond_denom",
-			Value: denom, 
+			Value: denom,
 		},
 	}
+
+	cps, err := getAllCurrencyPairs()
+	if err != nil {
+		panic(err)
+	}
+
+	marketParams := make([]pricestypes.MarketParam, len(cps))
+	marketPrices := make([]pricestypes.MarketPrice, len(cps))
+	for i, cp := range cps {
+		marketParams[i] = pricestypes.MarketParam{
+			Id: uint32(i),
+			Pair: fmt.Sprintf("%s-%s", cp.Base, cp.Quote),
+			Exponent: -8,
+			MinExchanges: 1,
+			MinPriceChangePpm: 1,
+			ExchangeConfigJson: "{}",
+		}
+
+		marketPrices[i] = pricestypes.MarketPrice{
+			Id: uint32(i),
+			Price: uint64(1),
+			Exponent: -8,
+		}
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.prices.market_params",
+		Value: marketParams,
+	})
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.prices.market_prices",
+		Value: marketPrices,
+	})
+
 	return chain.ModifyGenesis(genKVs)
 }
 
 func GetProvider(ctx context.Context, logger *zap.Logger) (provider.Provider, error) {
-	return docker.NewDockerProvider(
-		ctx,
-		logger,
-		"slinky-docker",
-	)
+	switch os.Getenv(envProviderType) {
+	case digitalOceanProviderType:
+		return digitalocean.NewDigitalOceanProvider(
+			ctx,
+			logger,
+			"slinky-digital-ocean",
+			os.Getenv(envDigitalOceanAPIKey),
+		)
+	case dockerProviderType:
+		return docker.NewDockerProvider(
+			ctx,
+			logger,
+			"slinky-docker",
+		)
+	default:
+		return nil, fmt.Errorf("unknown provider type: %s", os.Getenv(envProviderType))
+	}
 }
 
 func GetChain(ctx context.Context, logger *zap.Logger, config petritypes.ChainConfig) (petritypes.ChainI, error) {

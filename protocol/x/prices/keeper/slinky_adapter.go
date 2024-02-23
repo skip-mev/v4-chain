@@ -4,6 +4,7 @@ import (
 	"cosmossdk.io/math"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
 	"strings"
 )
@@ -16,7 +17,7 @@ import (
  * store for converting to and from Slinky's on chain price data.
  */
 
-func (k Keeper) GetCurrencyPairFromID(ctx sdk.Context, id uint64) (cp oracletypes.CurrencyPair, found bool) {
+func (k Keeper) GetCurrencyPairFromID(ctx sdk.Context, id uint64) (cp slinkytypes.CurrencyPair, found bool) {
 	mp, found := k.GetMarketParam(ctx, uint32(id))
 	if !found {
 		return cp, false
@@ -29,7 +30,7 @@ func (k Keeper) GetCurrencyPairFromID(ctx sdk.Context, id uint64) (cp oracletype
 	return cp, true
 }
 
-func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp oracletypes.CurrencyPair) (uint64, bool) {
+func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (uint64, bool) {
 	mps := k.GetAllMarketParams(ctx)
 	for _, mp := range mps {
 		mpCp, err := MarketPairToCurrencyPair(mp.Pair)
@@ -44,7 +45,7 @@ func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp oracletypes.CurrencyPai
 	return 0, false
 }
 
-func (k Keeper) GetPriceForCurrencyPair(ctx sdk.Context, cp oracletypes.CurrencyPair) (oracletypes.QuotePrice, error) {
+func (k Keeper) GetPriceForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (oracletypes.QuotePrice, error) {
 	id, found := k.GetIDForCurrencyPair(ctx, cp)
 	if !found {
 		return oracletypes.QuotePrice{}, fmt.Errorf("currency pair %s not found", cp.String())
@@ -58,12 +59,12 @@ func (k Keeper) GetPriceForCurrencyPair(ctx sdk.Context, cp oracletypes.Currency
 	}, nil
 }
 
-func MarketPairToCurrencyPair(marketPair string) (oracletypes.CurrencyPair, error) {
+func MarketPairToCurrencyPair(marketPair string) (slinkytypes.CurrencyPair, error) {
 	split := strings.Split(marketPair, "-")
 	if len(split) != 2 {
-		return oracletypes.CurrencyPair{}, fmt.Errorf("incorrectly formatted CurrencyPair: %s", marketPair)
+		return slinkytypes.CurrencyPair{}, fmt.Errorf("incorrectly formatted CurrencyPair: %s", marketPair)
 	}
-	cp := oracletypes.CurrencyPair{
+	cp := slinkytypes.CurrencyPair{
 		Base:  strings.ToUpper(split[0]),
 		Quote: strings.ToUpper(split[1]),
 	}

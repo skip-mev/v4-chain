@@ -106,6 +106,12 @@ func (o *OracleClient) Prices(ctx context.Context, in *oracleservicetypes.QueryP
 		if err != nil {
 			return nil, fmt.Errorf("slinky client returned price %s not parsable as uint64", priceString)
 		}
+
+		if price == 0 {
+			sdkCtx.Logger().Info("slinky client returned price 0 for market", "market id", uint32(id), "currency pair", currencyPairString)
+			continue
+		}
+
 		sdkCtx.Logger().Info("parsed update for", "market id", uint32(id), "price", price)
 
 		// append the update to the list of MarketPriceUpdates to be sent to the app's price-feed service

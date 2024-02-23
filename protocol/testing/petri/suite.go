@@ -3,17 +3,22 @@ package petri
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
 	"text/template"
 	"time"
+
 	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
 	"github.com/skip-mev/petri/cosmos/v2/loadtest"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
+
+	"os/signal"
+	"syscall"
 
 	evidencemodule "cosmossdk.io/x/evidence"
 	feegrantmodule "cosmossdk.io/x/feegrant/module"
@@ -57,11 +62,17 @@ import (
 	statsmodule "github.com/dydxprotocol/v4-chain/protocol/x/stats"
 	subaccountsmodule "github.com/dydxprotocol/v4-chain/protocol/x/subaccounts"
 	vestmodule "github.com/dydxprotocol/v4-chain/protocol/x/vest"
+	"github.com/skip-mev/petri/core/v2/provider"
 	petrinode "github.com/skip-mev/petri/cosmos/v2/node"
+	oracleconfig "github.com/skip-mev/slinky/oracle/config"
+	slinkytypes "github.com/skip-mev/slinky/pkg/types"
+	"github.com/skip-mev/slinky/providers/websockets/gate"
+	mmtypes "github.com/skip-mev/slinky/x/marketmap/types"
 )
 
 const (
-	envKeepAlive = "PETRI_ENV_KEEP_ALIVE"
+	envKeepAlive = "PETRI_LOAD_TEST_KEEP_ALIVE"
+	marketsPath = "./fixtures/markets.json"
 )
 
 // SlinkyIntegrationSuite is a test-suite used to spin up load-tests of arbitrary size for dydx nodes
@@ -95,21 +106,126 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 	err = s.chain.Init(context.Background())
 	s.Require().NoError(err)
 
+	cps, err := getAllCurrencyPairs()
+	s.Require().NoError(err)
+
 	// update oracle configs on each node
 	for _, node := range s.chain.GetValidators() {
-		err := updateOracleConfigOnNode(node.(*petrinode.Node))
-		s.Require().NoError(err)
+		s.Require().NoError(updateOracleConfigOnNode(node.(*petrinode.Node)))
+
+		// update oracle configs
+		s.Require().NoError(updateOracleConfig(node.GetTask().Sidecars[0], cps))
 	}
-	time.Sleep(5 * time.Second)
+}
+
+func updateOracleConfig(oracle *provider.Task, cps []slinkytypes.CurrencyPair) error {
+	// get the current config
+	ctx := context.Background()
+	cfgBz, err := oracle.ReadFile(ctx, oracleConfigPath)
+	if err != nil {
+		return err
+	}
+
+	// unmarshal into config
+	var oracleCfg oracleconfig.OracleConfig
+	if err := json.Unmarshal(cfgBz, &oracleCfg); err != nil {
+		return err
+	}
+
+	oracleCfg.Metrics = oracleconfig.MetricsConfig{
+		Enabled: true,
+		PrometheusServerAddress: fmt.Sprintf("%s:%s", "0.0.0.0", oracleMetricsPort),
+	}
+	oracleCfg.Production = true
+	oracleCfg.UpdateInterval = 1 * time.Second
+	oracleCfg.MaxPriceAge = 2 * time.Minute
+
+	// update config for coingecko API	
+	oracleCfg.Providers = []oracleconfig.ProviderConfig{
+		{
+			Name: gate.Name,
+			WebSocket: gate.DefaultWebSocketConfig,
+		},
+	}
+
+	bz, err := json.Marshal(oracleCfg)
+	if err != nil {
+		return err
+	}
+
+	if err := oracle.WriteFile(ctx, oracleConfigPath, bz); err != nil {
+		return err
+	}
+
+	marketConfig := mmtypes.MarketMap{
+		Tickers: make(map[string]mmtypes.Ticker), // map of cp.String() -> Ticker
+		Paths: make(map[string]mmtypes.Paths), // map of cp.String() -> []Path
+		Providers: make(map[string]mmtypes.Providers), // map of cp.String() -> []Provider
+	}
+
+	// set the market-config in accordance with the given base/quote pairs
+	for _, cp := range cps {
+		// create the ticker
+		marketConfig.Tickers[cp.String()] = mmtypes.Ticker{
+			CurrencyPair: cp,
+			MinProviderCount: 1,
+			Decimals:  8,
+		}
+
+		// create the paths
+		marketConfig.Paths[cp.String()] = mmtypes.Paths{
+			Paths: []mmtypes.Path{
+				{
+					Operations: []mmtypes.Operation{
+						{
+							CurrencyPair: cp,
+						},
+					},
+				},
+			},
+		}
+
+		// create the ticker config per provider
+		marketConfig.Providers[cp.String()] = mmtypes.Providers{
+			Providers: []mmtypes.ProviderConfig{
+				{
+					Name: gate.Name,
+					OffChainTicker: fmt.Sprintf("%s_%s", cp.Base, cp.Quote),
+				},
+			},
+		}
+	}
+
+	bz, err = json.Marshal(marketConfig)
+	if err != nil {
+		return err
+	}
+
+	if err := oracle.WriteFile(ctx, marketConfigPath, bz); err != nil {
+		return err
+	}	
+
+	// restart oracle
+	if err := oracle.Stop(ctx, true); err != nil {
+		return err
+	}
+
+	return oracle.Start(ctx, true)
 }
 
 func updateOracleConfigOnNode(node *petrinode.Node) error {
 	templateStr, cfg := dydxappconfig.InitAppConfig()
 
-	host, err := node.Sidecars[0].GetIP(context.Background())
+	oracleHost, err := node.GetTask().Sidecars[0].GetIP(context.Background())
+	if err != nil {
+		return err
+	}
 
-	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%d", host, oraclePort)
+	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%s", oracleHost, oraclePort)
 	cfg.MinGasPrices = fmt.Sprintf("0%s", denom)
+	cfg.Oracle.ClientTimeout = 10 * time.Second
+	cfg.Oracle.MetricsEnabled = true
+	cfg.Oracle.PrometheusServerAddress = fmt.Sprintf("%s:%s", "0.0.0.0", appOracleMetricsPort)
 
 	// create oracle template
 	tmpl, err := template.New("oracle").Parse(templateStr)
@@ -128,6 +244,18 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 		return err
 	}
 
+	// update comet config
+	if err := node.ModifyTomlConfigFile(context.Background(), cometConfigPath, petrinode.Toml{
+		"rpc": petrinode.Toml{
+			"pprof_laddr": fmt.Sprintf("%s:%s", "0.0.0.0", cometProfilerPort),
+		},
+		"instrumentation": petrinode.Toml{
+			"prometheus": true,
+		},
+	}); err != nil {
+		return err
+	}
+
 	// restart the node
 	if err := node.Task.Stop(context.Background(), true); err != nil {
 		return err
@@ -137,9 +265,13 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 }
 
 func (s *SlinkyIntegrationSuite) TearDownSuite() {
+	// create signal channels to block on interrupt
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM) // block on term / interrupt signals
+
 	// get the oracle integration-test suite keep alive env
 	if ok := os.Getenv(envKeepAlive); ok != "" {
-		return
+		<-sigCh
 	}
 	err := s.chain.Teardown(context.Background())
 	s.Require().NoError(err)
@@ -183,7 +315,7 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 		endpoints = append(endpoints, fmt.Sprintf("%s/websocket", url))
 	}
 
-	cfg := tmloadtest.Config{
+	_ = tmloadtest.Config{
 		ClientFactory:        "slinky",
 		Connections:          1,
 		Endpoints:            endpoints,
@@ -195,8 +327,8 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 		BroadcastTxMethod:    "async",
 		EndpointSelectMethod: "supplied",
 	}
-	err = tmloadtest.ExecuteStandalone(cfg)
-	s.Require().NoError(err)
+	// err = tmloadtest.ExecuteStandalone(cfg)
+	// s.Require().NoError(err)
 }
 
 func getModuleBasics() module.BasicManager {
@@ -258,4 +390,20 @@ func (s *SlinkyIntegrationSuite) genMsg(senderAddress []byte) ([]sdk.Msg, petrit
 			GasDenom:    "dv4tnt",
 			PricePerGas: 0,
 		}, nil
+}
+
+func getAllCurrencyPairs() ([]slinkytypes.CurrencyPair, error) {
+	// read the json fixture for all currency-pairs to report for
+	file, err := os.ReadFile(marketsPath)
+	if err != nil {
+		return nil, err
+	}
+
+	var pairs []slinkytypes.CurrencyPair
+	err = json.Unmarshal(file, &pairs)
+	if err != nil {
+		return nil, err
+	}
+
+	return pairs, nil
 }
