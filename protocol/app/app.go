@@ -793,6 +793,7 @@ func New(
 					appFlags,
 					logger,
 				)
+				app.RegisterDaemonWithHealthMonitor(app.SlinkyClient, maxDaemonUnhealthyDuration)
 			}
 		}
 
