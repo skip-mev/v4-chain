@@ -109,7 +109,8 @@ func (p *PriceFetcherImpl) FetchPrices(ctx context.Context) error {
 		// parse the price string into a uint64
 		price, err := strconv.ParseUint(priceString, 10, 64)
 		if err != nil {
-			return fmt.Errorf("slinky client returned price %s not parsable as uint64", priceString)
+			p.logger.Warn("slinky client returned a price not parsable as uint64", "price", priceString)
+			continue
 		}
 		p.logger.Info("parsed update for", "market id", id, "price", price)
 

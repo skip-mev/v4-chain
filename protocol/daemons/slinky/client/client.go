@@ -53,10 +53,9 @@ func (c *Client) start(
 ) error {
 	// 1. Start the MarketPairFetcher
 	c.marketPairFetcher = NewMarketPairFetcher(c.logger)
-	var wg sync.WaitGroup
-	wg.Add(1)
+	c.wg.Add(1)
 	go func() {
-		defer wg.Done()
+		defer c.wg.Done()
 		c.RunMarketPairFetcher(c.ctx, appFlags, grpcClient)
 	}()
 	// 2. Start the PriceFetcher
@@ -67,9 +66,9 @@ func (c *Client) start(
 		slinky,
 		c.logger,
 	)
-	wg.Add(1)
+	c.wg.Add(1)
 	go func() {
-		defer wg.Done()
+		defer c.wg.Done()
 		c.RunPriceFetcher(c.ctx)
 	}()
 	return nil
@@ -135,6 +134,10 @@ func (c *Client) RunMarketPairFetcher(ctx context.Context, appFlags appflags.Fla
 }
 
 // StartNewClient creates and runs a Client.
+// The client creates the MarketPairFetcher and PriceFetcher,
+// connects to the required grpc services, and launches them in goroutines.
+// It is non-blocking and returns on successful startup.
+// If it hits a critical error in startup it panics.
 func StartNewClient(
 	ctx context.Context,
 	slinky oracleclient.OracleClient,

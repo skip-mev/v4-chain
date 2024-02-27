@@ -169,7 +169,7 @@ func (p *PriceFetcherTestSuite) TestPriceFetcher() {
 		fetcher.Stop()
 	})
 
-	p.Run("errors on non-parsable price data", func() {
+	p.Run("continues on non-parsable price data", func() {
 		slinky.On("Start", mock.Anything).Return(nil).Once()
 		slinky.On("Prices", mock.Anything, mock.Anything).
 			Return(&types.QueryPricesResponse{
@@ -188,9 +188,7 @@ func (p *PriceFetcherTestSuite) TestPriceFetcher() {
 			logger,
 		)
 		p.Require().NoError(fetcher.Start(context.Background()))
-		p.Require().Errorf(
-			fetcher.FetchPrices(context.Background()),
-			"slinky client returned price %s not parsable as uint64", "abc123")
+		p.Require().NoError(fetcher.FetchPrices(context.Background()))
 		fetcher.Stop()
 	})
 
