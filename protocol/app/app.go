@@ -1809,7 +1809,9 @@ func (app *App) buildAnteHandler(txConfig client.TxConfig) sdk.AnteHandler {
 				FeegrantKeeper:  app.FeeGrantKeeper,
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
-			ClobKeeper: app.ClobKeeper,
+			ClobKeeper:   app.ClobKeeper,
+			Codec:        app.appCodec,
+			AuthStoreKey: app.keys[authtypes.StoreKey],
 		},
 	)
 	if err != nil {
