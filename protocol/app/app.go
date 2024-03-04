@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"encoding/json"
-	"github.com/dydxprotocol/v4-chain/protocol/app/prepare/prices"
 	"io"
 	"math/big"
 	"net/http"
@@ -101,6 +100,7 @@ import (
 	"github.com/dydxprotocol/v4-chain/protocol/app/flags"
 	"github.com/dydxprotocol/v4-chain/protocol/app/middleware"
 	"github.com/dydxprotocol/v4-chain/protocol/app/prepare"
+	"github.com/dydxprotocol/v4-chain/protocol/app/prepare/prices"
 	"github.com/dydxprotocol/v4-chain/protocol/app/process"
 
 	"github.com/dydxprotocol/v4-chain/protocol/lib"
