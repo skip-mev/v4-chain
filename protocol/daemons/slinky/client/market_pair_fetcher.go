@@ -8,7 +8,7 @@ import (
 	"cosmossdk.io/log"
 	"google.golang.org/grpc"
 
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	oracletypes "github.com/skip-mev/slinky/pkg/types"
 
 	appflags "github.com/dydxprotocol/v4-chain/protocol/app/flags"
 	daemontypes "github.com/dydxprotocol/v4-chain/protocol/daemons/types"
