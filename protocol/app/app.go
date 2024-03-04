@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"github.com/dydxprotocol/v4-chain/protocol/app/prepare/prices"
 	"io"
 	"math/big"
 	"net/http"
@@ -1298,6 +1299,7 @@ func New(
 	app.SetPrepareCheckStater(app.PrepareCheckStater)
 
 	// PrepareProposal setup.
+	priceUpdateGenerator := prices.NewDefaultPriceUpdateGenerator(app.PricesKeeper)
 	if appFlags.NonValidatingFullNode {
 		app.SetPrepareProposal(prepare.FullNodePrepareProposalHandler())
 	} else {
@@ -1306,13 +1308,14 @@ func New(
 				txConfig,
 				app.BridgeKeeper,
 				app.ClobKeeper,
-				app.PricesKeeper,
 				app.PerpetualsKeeper,
+				priceUpdateGenerator,
 			),
 		)
 	}
 
 	// ProcessProposal setup.
+	priceUpdateDecoder := process.NewDefaultUpdateMarketPriceTxDecoder(app.PricesKeeper, app.txConfig.TxDecoder())
 	if appFlags.NonValidatingFullNode {
 		// Note: If the command-line flag `--non-validating-full-node` is enabled, this node will use
 		// an implementation of `ProcessProposal` which always returns `abci.ResponseProcessProposal_ACCEPT`.
@@ -1324,7 +1327,7 @@ func New(
 				app.ClobKeeper,
 				app.StakingKeeper,
 				app.PerpetualsKeeper,
-				app.PricesKeeper,
+				priceUpdateDecoder,
 			),
 		)
 	} else {
@@ -1336,6 +1339,7 @@ func New(
 				app.StakingKeeper,
 				app.PerpetualsKeeper,
 				app.PricesKeeper,
+				priceUpdateDecoder,
 			),
 		)
 	}
