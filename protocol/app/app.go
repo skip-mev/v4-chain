@@ -203,10 +203,6 @@ import (
 	"github.com/dydxprotocol/v4-chain/protocol/indexer/indexer_manager"
 	"github.com/dydxprotocol/v4-chain/protocol/indexer/msgsender"
 
-	// Grpc Streaming
-	streaming "github.com/dydxprotocol/v4-chain/protocol/streaming/grpc"
-	streamingtypes "github.com/dydxprotocol/v4-chain/protocol/streaming/grpc/types"
-
 	// Slinky
 	slinkyproposals "github.com/skip-mev/slinky/abci/proposals"
 	"github.com/skip-mev/slinky/abci/strategies/aggregator"
@@ -218,6 +214,10 @@ import (
 	oracleclient "github.com/skip-mev/slinky/service/clients/oracle"
 	servicemetrics "github.com/skip-mev/slinky/service/metrics"
 	promserver "github.com/skip-mev/slinky/service/servers/prometheus"
+
+	// Grpc Streaming
+	streaming "github.com/dydxprotocol/v4-chain/protocol/streaming/grpc"
+	streamingtypes "github.com/dydxprotocol/v4-chain/protocol/streaming/grpc/types"
 )
 
 var (
