@@ -17,6 +17,8 @@ import (
 	clobtypes "github.com/dydxprotocol/v4-chain/protocol/x/clob/types"
 )
 
+const incrementSequenceAnteHandlerIndex = 12
+
 // HandlerOptions are the options required for constructing an SDK AnteHandler.
 // Note: This struct is defined here in order to add `ClobKeeper`. We use
 // struct embedding to include the normal cosmos-sdk `HandlerOptions`.

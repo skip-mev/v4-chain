@@ -1,0 +1,4402 @@
+[
+    {
+      "Base": "SQUID",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SRP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STND",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SUKU",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "TRU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UMB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VIDYX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WEX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XAVA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XYM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AART",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "AVAX",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "AXIS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BAKED",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "BERRY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CEL",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CRU",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "DIGG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DNXC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOSE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOT",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "FUSE",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "GGG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HBAR",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "HDV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ICP3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LKR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "LUNC",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "MIST",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NOIA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OOKI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORDI",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "ORDI",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "PYTH",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "SANDWICH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SCT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SEI",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "SHI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHIB2",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLP",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "SPA",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SUPER",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "UTK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VRT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZAM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "1INCH",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "AI",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "AIS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AME",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AR",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "AR3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ATA",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "BLUR",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "BLUR3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BSCS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ETC3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FOX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "GFT",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "MATIC",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "MULTI",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "OCEAN",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "PEOPLE",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "QUICK",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "REACH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SYN",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "VANRY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WOO3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WOOP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZTX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALU",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "AMKT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AR3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ASTR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ASTR",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "AXIS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "BONDLY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BZZ",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CELL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CORN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DEFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EGAME",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ETHA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIL",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "FIO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HMT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ID",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "KAS",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "KINE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LPT",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "MASK3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MASK3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MIMIR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "MINA",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "MTRG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NAFT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NUX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "PACE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PLCU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RLY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SGB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SYN",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "SYS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "UFT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VENT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AGIX",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "BDP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BORA",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CTI",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CUP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DAG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DODO",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "EPX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ETHW",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "FDUSD",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "HARD",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "IMX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "INSP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KUB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MATCH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OLT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POOL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PRX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RLY",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "RNDR",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "STRAX",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "VELA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WNZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "YFX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "YGG",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "BCUG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BSCPAD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CANTO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DIVER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EOS3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EOS5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LTC5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MDF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NBLU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PBX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PUMLX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SAKAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SATS",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "TOMI",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "XMON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALPHR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ATM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GHST",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HAPI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KZEN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LIKE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PBR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PSI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "QUACK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RAZE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REIGN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RING",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ROUTE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STEEM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STIK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VGX",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "VXT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "1INCH",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "AG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BABYELON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BSVBRC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CWS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DPET",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DUST",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GALA3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "JASMY",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "KTN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NEXO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OGV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WEMIX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XEC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "YFDAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ACX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AXS5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BAGS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BLOK",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CONV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EVRY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FTRB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LDO3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MASK",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "NETT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NIIFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PHTR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SIDUS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WLD",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "XAI",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "XCAD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZLW",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "AART",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ADS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BAMBOO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CFG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CLIPS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DVP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FILDA",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "FURUCOMBO",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ICP3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LSD7",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MTS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "PSUB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TOMI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WISTA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XDC",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ASS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BNB3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CQT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "D2T",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GARI",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "GARI",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "LADYS",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "MARSH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PYR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STG",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ALPINE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALT",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "AVA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BSW",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHZ",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "CPOOL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "INSUR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "KLO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MEMETOON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ML",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OBI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PUSH",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "REALM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RIM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SEI3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SERO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SIN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SOL3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XET",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AIRTNT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "APT",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "BICO",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "BONK",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "CSIX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DAO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "JASMY",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "LITH",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "MCRT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MTA",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "OKT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POLYX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RSR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SFP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VRA",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "DF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FOX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HMX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IDEA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MPLX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NMT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SQUAD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SUKU",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "TLOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALEPH",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "DERC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DIO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MBOX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MMSS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "O3",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REDTOKEN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SAKE",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "TARA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XDC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XRD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BNB3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EML",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IZI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MOB",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "PORTX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RBC",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SDAO",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "STARL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SUKU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WRT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XELS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XEN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZAT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CTY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IRIS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MBX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POLC",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "REI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TARA",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "XPET",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "APT",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "ARV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ASM",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "BTC3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "JST",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MOVEZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NYM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RAGE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SAMO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHIB",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "WAGMIGAMES",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WOO3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CEEK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HECH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HFT",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "KNJ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PANDO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RAY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RNDR3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SDAO",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SDN",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "SXP3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UPC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AURORA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BADGER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BOBA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COMBO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DORA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ENJ",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "FOR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ING",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PIT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SPS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STRK",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "TAKI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "THL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VELODROME",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AST",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BNSX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CEEK",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CEUR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OVR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "QRDO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SDN",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SEILOR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CELL",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CRV",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "FRA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FRONT",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "KMA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SS20",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SUNNY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SUPER",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SWAY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TROY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TXT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WATT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CAKE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FERC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KING",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MDX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "MILO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MNW",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POOH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POPK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RPL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TROSS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WXT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZBU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZLW",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ATLAS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BTC3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHESS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOGE2",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GMMT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NFTL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORCA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHIB5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WORK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AISC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARPA3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARTY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BEAR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CREAM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOGE3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLOKICEO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FREE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FTT3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GLM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OMI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OPUL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XYO",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "10SET",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ATK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DUSK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FYN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GOLC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GST",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IBAYC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MTS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NWC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PEPE3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TURT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VGX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "WNCG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XYO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AIE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ANC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ASTRA",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "BLANKV2",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LGX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LOVELY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AERGO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CEL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COTI3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CSTR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EARN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GLQ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LMWR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PIXEL",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "RARE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ROA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "API3",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "AXS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "DILI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOT",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "FCON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FTT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GNO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PROM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RBN",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "TON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "USDD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VEMP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALPH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BOND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CRO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MLN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RENA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "THE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TWT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARB3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EGLD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ENJ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FORTH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GARI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HIFI",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "LEMN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MNZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OMN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORAO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RARI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WIFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COTI3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FNZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KAR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SOL",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "T",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UNI",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "XCN",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ZKB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AZY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CQT",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "CSPR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DEK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LEASH",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "DEXE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LOKA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MAV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MONG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZERO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CART",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CTSI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ECLIP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EVMOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KNFT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LYNX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PMON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PORTO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOGE3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ITRUMP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POKT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALCX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KONO",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "LOOKS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SDAO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SOV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XRD",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "COTI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "METALDR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "URUS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VELO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ATOZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BRCT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DAR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HORD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LEVER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PYR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SHIB5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CAGA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MOONEY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RDNT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RMRK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COVAL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DIONE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KAT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KSM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MBS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "MMT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MOMA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NODL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PORT3",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SOLS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WALV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GROKCEO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MET",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REVOLAND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ACA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AXS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CTI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DEVVE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FAME",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KIBA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LOOKS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LUNR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MLK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STMX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "YIN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLOKI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IMPT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "JOE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KARATE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PERP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SPELL",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "TCP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VOXEL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALPHA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ANML",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ANT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DIS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "QUICK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UBXS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CSAS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CTK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FURUCOMBO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GAL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GALA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LEV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MAJO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PLAY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLRS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SNY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TRA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TYPE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ATA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GMT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "INSUR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KICKS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KP3R",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RANKER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DYDX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "GROK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MATIC",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "NEAR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "OG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POLC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SPIRIT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STOS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "TRAC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XRP5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIL",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "HAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LDO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NSDX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PSG",
+      "Quote": "TRY"
+    },
+    {
+      "Base": "SANTOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SRM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SYN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TLM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TRCL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARPA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CERE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COMP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DARK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DPR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLUX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "HIFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IHC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MDAO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MESA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHARE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SIS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CIRUS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GAIA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HOPR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KCAL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MATIC",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ORDI3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SOPH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "INDI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "QTCON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RNDR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "TAP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AIDOGE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BICO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BOSON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FARM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RVN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STRAX",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "XPR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BCH5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BENQI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CATHEON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CUDOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOGGO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ERG",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "HYVE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LINA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MTG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NEBL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ACH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AMU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COPI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ERN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GALA5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OAS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REVV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SRM",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SXP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TAO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TOKEN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "APP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CLORE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CRPT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "APX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BEL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DHX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DODO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOGE5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAZIO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PEPE",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "UNIBOT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "5IRE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ANKR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DYDX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MAR3",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POLS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SEAM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SYS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZBC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AUTO",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "AZERO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CORGIAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "INTR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KAVA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LEASH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "METIS",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "OP",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "PEPE2",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHIB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SNX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "1INCH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOGI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ELON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MLT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MOVR",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "MTA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORBS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "QTC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "YFII",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BONE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FITFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GITCOIN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GRV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ICE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "INTER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ISP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STRAX",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "VINU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "YFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GOMINING",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PEPE3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TRACE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VRTX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALICE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BTC5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CELO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIL3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLUX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FRONT",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "PINE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SCLP",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "SUN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AVAX3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EOS5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAYER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RJV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WEN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZZZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLOW",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MASK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MNT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NTRN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STPT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UNN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AKT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARB",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "DERP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GORILLA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OPN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DENT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PNK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SKILL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AINN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AMB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BSV5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HFT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HOT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LIT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OXT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PERL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RIN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SAND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STORE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AVAX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DMS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FEAR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KISHU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NEAR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UNFI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AMC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHZ",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "DOGE5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAVA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LIQ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "METAL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RAD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RNDX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TRADE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VRA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WAXL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WMT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XRP5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LENDS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ACH",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "ARCX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BACON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CVX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FRR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MDX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MEME",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MULTI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NMR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RUNE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NIZA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SCLP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AAVE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AKRO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BLOK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DUEL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LTC5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KEY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PAW",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "USDG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ATD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HOGE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REAL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UNI5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AGLD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AUTO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BAS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "C98",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "GALA",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "JUP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PHA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SERSH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WOM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AFC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FTM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HARD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ODDZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PPT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SUSHI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZIG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHAPZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DEUS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GGM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LOOP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VGX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CTC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GLMR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ID",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MOVR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STRAX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SUDO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIL",
+      "Quote": "BTC"
+    },
+    {
+      "Base": "FXS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OP",
+      "Quote": "USDC"
+    },
+    {
+      "Base": "WOO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GNS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAVASWAP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MTL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SATS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ADX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CVP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DZOO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PLANET",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SOL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "YGG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DCK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IDEX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHOPNEXT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TALK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FLR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RSS3",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SKL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BRISE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EVER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SWFTC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UFO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALPACA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FBX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GALA5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WWY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OGN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PRIMAL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RACA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SAROS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TOX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XETA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ASTRA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BRN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BSV5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOT5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LUNA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MBS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MGKL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MTD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PSTAKE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WAXP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "API3",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BAKE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BAND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CRV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIL",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "RITE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHILL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "1CAT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GMX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IOST",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NVIR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SAUBER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BNT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DIA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WBIRD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIL3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HELLO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MTV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PNG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SCY",
+      "Quote": "ETH"
+    },
+    {
+      "Base": "WBTC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WIKEN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XCHNG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AVT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LNDX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VOLT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZEC3S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OSKY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TRG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BSCS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KDA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LUNC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MINA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NAKA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PYTH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SFUND",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "APN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FILDA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KAP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ASTR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EDU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NFT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STSOL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BDIN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DMAIL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "EJS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ERG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IPUNKS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LPT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SWASH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ACE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GTAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LADYS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAMB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LITH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BABYDOGE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ITSB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZEN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AGI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NFP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RBN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XNA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KLAY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PIXEL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PORK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WIF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AGIX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HOOK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "METIS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NADA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RATS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VALUE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ASM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AUDIO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOT5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "JTO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZEUM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BEFE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BONK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HBAR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MAGIC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MATIC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MAVIA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PCX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TURBO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UMA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ABBC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BTC5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GOZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ICP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OCEAN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UNI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CORE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHFT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "APT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BABYGROK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BBF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CVAULTCORE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TRB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HIGH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SUPER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ONE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AITECH",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ETHW",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KAS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SCY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KIN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MUSIC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XVS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CKB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CYBER",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HEGIC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LQTY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "C98",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FET",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ULTIMA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DIMO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORDI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RIF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SNEK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RON",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZKF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DEGO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ETH5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "IMX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ROSE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SSV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "VIA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LBR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NGL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TSUKA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ILV",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ONDO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REEF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SPELL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SWEAT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WLKN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AIR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORDS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PEOPLE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PEPE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RNDR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BCUT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BLUR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OPTIMUS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "QNT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "REF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GFT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AUCTION",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TAPROOT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AKITA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ENS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FODL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TROLL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ALGO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AXS5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "BEAMX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WIN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FIL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FTN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KUMA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ETH5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LINK5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LINK5S",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MANTA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "POGAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TAMA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "APE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARBI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FRONT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "FTT3L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GRT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "KONO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SHX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "WLD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CFX",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CGPT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "STRK",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "TIA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "UNI5L",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHZ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PENDLE",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARKM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LBL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CRU",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "RFD",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "LAI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "USTC",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "GMM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PMG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SFG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DOME",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "INJ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ARB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OP",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SPA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "MUBI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "NOS",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "CHEEL",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "PHB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ORNJ",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ADF",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "COREUM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SEI",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "JASMY",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "OBT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ROOT",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SQR",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "SLIM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XCN",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "ZETA",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "F3",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "AIBB",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "DESO",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "HAM",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "THG",
+      "Quote": "USDT"
+    },
+    {
+      "Base": "XAUT",
+      "Quote": "USDT"
+    }
+  ]

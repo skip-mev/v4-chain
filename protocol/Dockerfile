@@ -71,5 +71,15 @@ EXPOSE 26657
 EXPOSE 1317
 # grpc
 EXPOSE 9090
+# oracle server
+EXPOSE 8080
+# oracle metrics
+EXPOSE 8010
+# tendermint prometheus metrics
+EXPOSE 26660
+# tendermint profiler endpoint
+EXPOSE 6060
+# oracle app-side metrics
+EXPOSE 26661
 
 ENTRYPOINT ["dydxprotocold"]
