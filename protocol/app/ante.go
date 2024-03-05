@@ -216,7 +216,9 @@ func (h *lockingAnteHandler) clobAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate
 	if isShortTerm, err = clobante.IsShortTermClobMsgTx(ctx, tx); err != nil {
 		return ctx, err
 	}
-	if !isShortTerm {
+
+	// We skip incrementing the sequence number for short term clob messages or for all messages (if loadtesting)
+	if !isShortTerm && !SkipSequenceIncrementAnteHandler {
 		if ctx, err = h.incrementSequence.AnteHandle(ctx, tx, simulate, noOpAnteHandle); err != nil {
 			return ctx, err
 		}
@@ -369,8 +371,13 @@ func (h *lockingAnteHandler) otherMsgAnteHandle(ctx sdk.Context, tx sdk.Tx, simu
 	if ctx, err = h.sigVerification.AnteHandle(ctx, tx, simulate, noOpAnteHandle); err != nil {
 		return ctx, err
 	}
-	if ctx, err = h.incrementSequence.AnteHandle(ctx, tx, simulate, noOpAnteHandle); err != nil {
-		return ctx, err
+
+	// don't increment sequence numbers if we are loadtesting
+	if !SkipSequenceIncrementAnteHandler {
+		if ctx, err = h.incrementSequence.AnteHandle(ctx, tx, simulate, noOpAnteHandle); err != nil {
+			return ctx, err
+		}
+	} else {
 	}
 
 	// During non-simulated `checkTx` we must write the store since we own branching and writing.

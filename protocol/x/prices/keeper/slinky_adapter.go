@@ -21,6 +21,17 @@ import (
  */
 
 func (k Keeper) GetCurrencyPairFromID(ctx sdk.Context, id uint64) (cp slinkytypes.CurrencyPair, found bool) {
+	// check in the keeper's cache first
+	pair, found := k.currencyPairIDCache.GetCurrencyPairFromID(id)
+	if found {
+		cp, err := slinkytypes.CurrencyPairFromString(pair)
+		if err != nil {
+			k.Logger(ctx).Error("CurrencyPairFromString", "error", err)
+			return cp, false
+		}
+		return cp, true
+	}
+
 	mp, found := k.GetMarketParam(ctx, uint32(id))
 	if !found {
 		return cp, false
@@ -30,10 +41,20 @@ func (k Keeper) GetCurrencyPairFromID(ctx sdk.Context, id uint64) (cp slinkytype
 		k.Logger(ctx).Error("CurrencyPairFromString", "error", err)
 		return cp, false
 	}
+	// cache the result
+	k.currencyPairIDCache.AddCurrencyPair(id, cp.String())
+	
 	return cp, true
 }
 
 func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (uint64, bool) {
+	// check in the keeper's cache first
+	id, found := k.currencyPairIDCache.GetIDForCurrencyPair(cp.String())
+	if found {
+		return id, true
+	}
+
+	// if not found, iterate through all market params and find the id
 	mps := k.GetAllMarketParams(ctx)
 	for _, mp := range mps {
 		mpCp, err := slinky.MarketPairToCurrencyPair(mp.Pair)
@@ -41,10 +62,16 @@ func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPai
 			k.Logger(ctx).Error("market param pair invalid format", "pair", mp.Pair)
 			continue
 		}
+
+		// cache as many values as possible to avoid future work
+		k.currencyPairIDCache.AddCurrencyPair(uint64(mp.Id), mpCp.String())
+
+		// compare the currency pairs to the one that we're looking for
 		if strings.EqualFold(mpCp.String(), cp.String()) {
 			return uint64(mp.Id), true
 		}
 	}
+
 	return 0, false
 }
 

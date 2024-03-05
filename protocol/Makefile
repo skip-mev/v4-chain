@@ -5,6 +5,7 @@ HTTPS_GIT := https://github.com/dydxprotocol/v4.git
 GO_VERSION := $(shell cat go.mod | grep -E 'go [0-9].[0-9]+' | cut -d ' ' -f 2)
 PROJECT_NAME := $(shell git remote get-url origin | xargs basename -s .git)
 CGO_ENABLED=1
+SLINKY_REF=main
 export GIT_COMMIT_HASH=$(shell git rev-parse --short HEAD)
 export COMMIT=$(shell git rev-parse HEAD)
 
@@ -333,7 +334,6 @@ proto-download-deps:
 
 .PHONY: proto-swagger-gen
 
-
 ###############################################################################
 ###                                Localnet                                 ###
 ###############################################################################
@@ -417,9 +417,9 @@ update-swagger-docs: statik
 
 # Run at `./protocol` directory.
 update-sample-pregenesis:
-	$(MAKE) localnet-build
-	@docker build . -t check-sample-pregenesis -f scripts/genesis/Dockerfile --no-cache
-	@docker run --entrypoint ./scripts/genesis/copy_sample_pregenesis.sh  -v $(CURDIR):/workspace check-sample-pregenesis
+	make build
+	./scripts/genesis/prod_pregenesis.sh build/dydxprotocold
+	cp /tmp/prod-chain/.dydxprotocol/config/sorted_genesis.json ./scripts/genesis/sample_pregenesis.json
 	@echo "Updated ./scripts/genesis/sample_pregenesis.json"
 
 check-sample-pregenesis-up-to-date:
@@ -428,3 +428,17 @@ check-sample-pregenesis-up-to-date:
 	@docker run -v $(CURDIR):/workspace check-sample-pregenesis 
 
 .PHONY: update-sample-pregenesis check-sample-pregenesis-up-to-date
+
+###############################################################################
+###                              LoadTests                                  ###
+###############################################################################
+loadtest-build:
+	@echo "Build loadtest test image at commit ${GIT_COMMIT_HASH}"
+	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) --build-arg SLINKY_REF=$(SLINKY_REF) . -t dydxprotocol-base --no-cache --build-arg BUILD_TAGS="netgo,ledger,muslc,skip_sequence_increment_ante_handler"
+
+loadtest-run:
+	@echo "Running loadtest at commit ${GIT_COMMIT_HASH}"
+	cd testing/petri && go test -v -race -timeout 0 ./
+	@echo "Loadtest finished, cleaning up containers"
+	docker rm -f $(shell docker ps -a -q --filter ancestor=busybox)
+	docker volume rm $(shell docker volume ls -q --filter dangling=true)

@@ -1,7 +1,6 @@
 # NB: This is a digest for a multi-arch manifest list, you will want to get this by running
 # `docker buildx imagetools inspect golang:1.21-alpine`
 ARG GOLANG_1_22_ALPINE_DIGEST="8e96e6cff6a388c2f70f5f662b64120941fcd7d4b89d62fec87520323a316bd9"
-
 # This Dockerfile is a stateless build of the `dydxprotocold` binary as a Docker container.
 # It does not include any configuration, state, or genesis information.
 
@@ -12,6 +11,7 @@ ARG GOLANG_1_22_ALPINE_DIGEST="8e96e6cff6a388c2f70f5f662b64120941fcd7d4b89d62fec
 FROM golang@sha256:${GOLANG_1_22_ALPINE_DIGEST} as builder
 ARG VERSION
 ARG COMMIT
+ARG BUILD_TAGS="netgo,ledger,muslc"
 
 RUN set -eux; apk add --no-cache ca-certificates build-base; apk add git linux-headers bash binutils-gold
 
@@ -30,12 +30,12 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/root/go/pkg/mod \
     go build \
       -mod=readonly \
-      -tags "netgo,ledger,muslc" \
+      -tags "$BUILD_TAGS" \
       -ldflags "-X github.com/cosmos/cosmos-sdk/version.Name="dydxprotocol" \
               -X github.com/cosmos/cosmos-sdk/version.AppName="dydxprotocold" \
               -X github.com/cosmos/cosmos-sdk/version.Version=$VERSION \
               -X github.com/cosmos/cosmos-sdk/version.Commit=$COMMIT \
-              -X github.com/cosmos/cosmos-sdk/version.BuildTags='netgo,ledger,muslc' \
+              -X github.com/cosmos/cosmos-sdk/version.BuildTags='$BUILD_TAGS' \
               -w -s -linkmode=external -extldflags '-Wl,-z,muldefs -static'" \
       -trimpath \
       -o /dydxprotocol/build/ \
@@ -58,6 +58,8 @@ RUN apk add --no-cache bash
 COPY --from=builder /dydxprotocol/build/dydxprotocold /bin/dydxprotocold
 COPY --from=builder /dydxprotocol/daemons/slinky/config/oracle.json /etc/oracle.json
 COPY --from=builder /dydxprotocol/daemons/slinky/config/market.json /etc/market.json
+COPY --from=builder /slinky/config/local/oracle.json /oracle/oracle.json
+COPY --from=builder /slinky/config/local/market.json /oracle/market.json
 COPY --from=builder /slinky/build/oracle /bin/slinky
 
 ENV HOME /dydxprotocol
@@ -71,5 +73,15 @@ EXPOSE 26657
 EXPOSE 1317
 # grpc
 EXPOSE 9090
+# oracle server
+EXPOSE 8080
+# oracle metrics
+EXPOSE 8010
+# tendermint prometheus metrics
+EXPOSE 26660
+# tendermint profiler endpoint
+EXPOSE 6060
+# oracle app-side metrics
+EXPOSE 26661
 
 ENTRYPOINT ["dydxprotocold"]
