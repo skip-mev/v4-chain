@@ -16,10 +16,6 @@ import (
 	slinkyabci "github.com/skip-mev/slinky/abci/types"
 )
 
-var (
-	EmptyResponse = abci.ResponsePrepareProposal{Txs: [][]byte{}}
-)
-
 // PricesTxResponse represents a response for creating `UpdateMarketPrices` tx.
 type PricesTxResponse struct {
 	Tx         []byte
@@ -71,7 +67,7 @@ func PrepareProposalHandler(
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("NewPrepareProposalTxs error: %v", err))
 			recordErrorMetricsWithLabel(metrics.PrepareProposalTxs)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 
 		var extCommitBzTx []byte
@@ -84,7 +80,7 @@ func PrepareProposalHandler(
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("GetValidMarketPriceUpdates error: %v", err))
 			recordErrorMetricsWithLabel(metrics.PricesTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 
 		// Gather "FixedSize" group messages.
@@ -92,33 +88,33 @@ func PrepareProposalHandler(
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("GetUpdateMarketPricesTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.PricesTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 		err = txs.SetUpdateMarketPricesTx(pricesTxResp.Tx)
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("SetUpdateMarketPricesTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.PricesTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 
 		fundingTxResp, err := GetAddPremiumVotesTx(ctx, txConfig, perpetualKeeper)
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("GetAddPremiumVotesTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.FundingTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 		err = txs.SetAddPremiumVotesTx(fundingTxResp.Tx)
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("SetAddPremiumVotesTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.FundingTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 
 		acknowledgeBridgesTxResp, err := GetAcknowledgeBridgesTx(ctx, txConfig, bridgeKeeper)
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("GetAcknowledgeBridgesTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.AcknowledgeBridgesTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 		// Set AcknowledgeBridgesTx whether there are bridge events or not to ensure
 		// consistent ordering of txs received by ProcessProposal.
@@ -126,7 +122,7 @@ func PrepareProposalHandler(
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("SetAcknowledgeBridgesTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.AcknowledgeBridgesTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 
 		// Gather "Other" group messages.
@@ -139,7 +135,7 @@ func PrepareProposalHandler(
 			if err != nil {
 				ctx.Logger().Error(fmt.Sprintf("AddOtherTxs error: %v", err))
 				recordErrorMetricsWithLabel(metrics.OtherTxs)
-				return &EmptyResponse, nil
+				return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 			}
 		}
 
@@ -149,13 +145,13 @@ func PrepareProposalHandler(
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("GetProposedOperationsTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.OperationsTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 		err = txs.SetProposedOperationsTx(operationsTxResp.Tx)
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("SetProposedOperationsTx error: %v", err))
 			recordErrorMetricsWithLabel(metrics.OperationsTx)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 
 		// Try to pack in more "Other" txs.
@@ -167,7 +163,7 @@ func PrepareProposalHandler(
 				if err != nil {
 					ctx.Logger().Error(fmt.Sprintf("AddOtherTxs (additional) error: %v", err))
 					recordErrorMetricsWithLabel(metrics.OtherTxs)
-					return &EmptyResponse, nil
+					return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 				}
 			}
 		}
@@ -176,7 +172,7 @@ func PrepareProposalHandler(
 		if err != nil {
 			ctx.Logger().Error(fmt.Sprintf("GetTxsInOrder error: %v", err))
 			recordErrorMetricsWithLabel(metrics.GetTxsInOrder)
-			return &EmptyResponse, nil
+			return &abci.ResponsePrepareProposal{Txs: [][]byte{}}, nil
 		}
 
 		// Record a success metric.
