@@ -11,43 +11,44 @@ import (
 	"google.golang.org/grpc"
 )
 
-// OracleClient is a wrapper around the default Slinky OracleClient interface. This object is responsible for requesting
-// prices from the x/prices module (originally sent via the sidecar to the price-feed service), and
-// injecting those prices into the vote-extension.
-type OracleClient struct {
+// OraclePrices is an implementation of the Slinky OracleClient interface.
+// This object is responsible for requesting prices from the x/prices module, and injecting those prices into the
+// vote-extension.
+// The
+type OraclePrices struct {
 	PricesKeeper PricesKeeper
 }
 
-// NewOracleClient returns a new OracleClient object.
-func NewOracleClient(pricesKeeper PricesKeeper) *OracleClient {
-	return &OracleClient{
+// NewOraclePrices returns a new OracleClient object.
+func NewOraclePrices(pricesKeeper PricesKeeper) *OraclePrices {
+	return &OraclePrices{
 		PricesKeeper: pricesKeeper,
 	}
 }
 
-// Start starts the OracleClient.
-func (o *OracleClient) Start(_ context.Context) error {
+// Start is a no-op.
+func (o *OraclePrices) Start(_ context.Context) error {
 	return nil
 }
 
-// Stop stops the OracleClient.
-func (o *OracleClient) Stop() error {
+// Stop is a no-op.
+func (o *OraclePrices) Stop() error {
 	return nil
 }
 
-// Prices is a wrapper around the Slinky OracleClient's Prices method.
+// Prices is called in ExtendVoteHandler to determine which Prices are put into the extended commit.
 // This method is responsible for doing the following:
 //  1. Get the latest prices from the x/prices module's indexPriceCache via GetValidMarketPriceUpdates
 //  2. Translate the response from x/prices into a QueryPricesResponse, and return it.
 //
 // This method fails if:
 //   - The passed in context is not an sdk.Context
-func (o *OracleClient) Prices(ctx context.Context,
+func (o *OraclePrices) Prices(ctx context.Context,
 	_ *oracleservicetypes.QueryPricesRequest,
-	opts ...grpc.CallOption) (*oracleservicetypes.QueryPricesResponse, error) {
+	_ ...grpc.CallOption) (*oracleservicetypes.QueryPricesResponse, error) {
 	sdkCtx, ok := ctx.(sdk.Context)
 	if !ok {
-		return nil, fmt.Errorf("oracle client was passed on non-sdk context object")
+		return nil, fmt.Errorf("OraclePrices was passed on non-sdk context object")
 	}
 
 	// get the final prices to include in the vote-extension from the x/prices module

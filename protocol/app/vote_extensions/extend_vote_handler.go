@@ -25,6 +25,9 @@ type ExtendVoteHandler struct {
 //  3. Updating the market prices in the PricesKeeper so that the GetValidMarketPriceUpdates function returns the
 //     latest available market prices
 //  4. Calling the Slinky ExtendVoteHandler to handle the rest of ExtendVote
+//
+// See https://github.com/skip-mev/slinky/blob/a5b1d3d3a2723e4746b5d588c512d7cc052dc0ff/abci/ve/vote_extension.go#L77
+// for the Slinky ExtendVoteHandler logic.
 func (e *ExtendVoteHandler) ExtendVoteHandler() sdk.ExtendVoteHandler {
 	return func(ctx sdk.Context, req *cometabci.RequestExtendVote) (resp *cometabci.ResponseExtendVote, err error) {
 		// Decode the x/prices txn in the current block

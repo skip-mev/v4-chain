@@ -15,7 +15,7 @@ import (
 )
 
 func TestStartStopNoop(t *testing.T) {
-	cli := NewOracleClient(nil)
+	cli := NewOraclePrices(nil)
 
 	err := cli.Start(context.TODO())
 	require.NoError(t, err)
@@ -25,7 +25,7 @@ func TestStartStopNoop(t *testing.T) {
 
 func TestValidPriceResponse(t *testing.T) {
 	pk := mocks.NewPricesKeeper(t)
-	cli := NewOracleClient(pk)
+	cli := NewOraclePrices(pk)
 	pk.On("GetValidMarketPriceUpdates", mock.Anything).
 		Return(&types.MsgUpdateMarketPrices{
 			MarketPriceUpdates: []*types.MsgUpdateMarketPrices_MarketPrice{
@@ -46,7 +46,7 @@ func TestValidPriceResponse(t *testing.T) {
 
 func TestNonSdkContextFails(t *testing.T) {
 	pk := mocks.NewPricesKeeper(t)
-	cli := NewOracleClient(pk)
+	cli := NewOraclePrices(pk)
 
 	_, err := cli.Prices(context.TODO(), nil)
 
@@ -55,7 +55,7 @@ func TestNonSdkContextFails(t *testing.T) {
 
 func TestEmptyUpdatesPasses(t *testing.T) {
 	pk := mocks.NewPricesKeeper(t)
-	cli := NewOracleClient(pk)
+	cli := NewOraclePrices(pk)
 	pk.On("GetValidMarketPriceUpdates", mock.Anything).
 		Return(&types.MsgUpdateMarketPrices{
 			MarketPriceUpdates: []*types.MsgUpdateMarketPrices_MarketPrice{},
@@ -69,7 +69,7 @@ func TestEmptyUpdatesPasses(t *testing.T) {
 
 func TestNilUpdatesPasses(t *testing.T) {
 	pk := mocks.NewPricesKeeper(t)
-	cli := NewOracleClient(pk)
+	cli := NewOraclePrices(pk)
 	pk.On("GetValidMarketPriceUpdates", mock.Anything).
 		Return(nil).Once()
 
@@ -81,7 +81,7 @@ func TestNilUpdatesPasses(t *testing.T) {
 
 func TestPairNotFoundNoOps(t *testing.T) {
 	pk := mocks.NewPricesKeeper(t)
-	cli := NewOracleClient(pk)
+	cli := NewOraclePrices(pk)
 	pk.On("GetValidMarketPriceUpdates", mock.Anything).
 		Return(&types.MsgUpdateMarketPrices{
 			MarketPriceUpdates: []*types.MsgUpdateMarketPrices_MarketPrice{
