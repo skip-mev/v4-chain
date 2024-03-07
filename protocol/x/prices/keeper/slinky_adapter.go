@@ -48,11 +48,11 @@ func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPai
 func (k Keeper) GetPriceForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (oracletypes.QuotePrice, error) {
 	id, found := k.GetIDForCurrencyPair(ctx, cp)
 	if !found {
-		return oracletypes.QuotePrice{}, fmt.Errorf("currency pair %s not found", cp.String())
+		return oracletypes.QuotePrice{}, fmt.Errorf("id for currency pair %s not found", cp.String())
 	}
 	mp, err := k.GetMarketPrice(ctx, uint32(id))
 	if err != nil {
-		return oracletypes.QuotePrice{}, fmt.Errorf("currency pair %s not found", cp.String())
+		return oracletypes.QuotePrice{}, fmt.Errorf("market price not found for currency pair %s", cp.String())
 	}
 	return oracletypes.QuotePrice{
 		Price: math.NewIntFromUint64(mp.Price),
