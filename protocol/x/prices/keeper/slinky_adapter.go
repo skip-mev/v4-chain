@@ -1,12 +1,15 @@
 package keeper
 
 import (
-	"cosmossdk.io/math"
 	"fmt"
+	"strings"
+
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
-	"strings"
+
+	"github.com/dydxprotocol/v4-chain/protocol/lib/slinky"
 )
 
 /*
@@ -22,7 +25,7 @@ func (k Keeper) GetCurrencyPairFromID(ctx sdk.Context, id uint64) (cp slinkytype
 	if !found {
 		return cp, false
 	}
-	cp, err := MarketPairToCurrencyPair(mp.Pair)
+	cp, err := slinky.MarketPairToCurrencyPair(mp.Pair)
 	if err != nil {
 		k.Logger(ctx).Error("CurrencyPairFromString", "error", err)
 		return cp, false
@@ -33,7 +36,7 @@ func (k Keeper) GetCurrencyPairFromID(ctx sdk.Context, id uint64) (cp slinkytype
 func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (uint64, bool) {
 	mps := k.GetAllMarketParams(ctx)
 	for _, mp := range mps {
-		mpCp, err := MarketPairToCurrencyPair(mp.Pair)
+		mpCp, err := slinky.MarketPairToCurrencyPair(mp.Pair)
 		if err != nil {
 			k.Logger(ctx).Error("market param pair invalid format", "pair", mp.Pair)
 			continue
@@ -57,17 +60,4 @@ func (k Keeper) GetPriceForCurrencyPair(ctx sdk.Context, cp slinkytypes.Currency
 	return oracletypes.QuotePrice{
 		Price: math.NewIntFromUint64(mp.Price),
 	}, nil
-}
-
-func MarketPairToCurrencyPair(marketPair string) (slinkytypes.CurrencyPair, error) {
-	split := strings.Split(marketPair, "-")
-	if len(split) != 2 {
-		return slinkytypes.CurrencyPair{}, fmt.Errorf("incorrectly formatted CurrencyPair: %s", marketPair)
-	}
-	cp := slinkytypes.CurrencyPair{
-		Base:  strings.ToUpper(split[0]),
-		Quote: strings.ToUpper(split[1]),
-	}
-
-	return cp, cp.ValidateBasic()
 }
