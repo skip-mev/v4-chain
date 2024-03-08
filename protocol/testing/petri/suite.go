@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"strconv"
 	"text/template"
 	"time"
-
+	"net/http"
 	tmloadtest "github.com/informalsystems/tm-load-test/pkg/loadtest"
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
@@ -72,7 +73,7 @@ import (
 
 const (
 	envKeepAlive = "PETRI_LOAD_TEST_KEEP_ALIVE"
-	marketsPath = "./fixtures/markets.json"
+	marketsPath = "./markets.json"
 )
 
 // SlinkyIntegrationSuite is a test-suite used to spin up load-tests of arbitrary size for dydx nodes
@@ -275,6 +276,9 @@ func (s *SlinkyIntegrationSuite) TearDownSuite() {
 	}
 	err := s.chain.Teardown(context.Background())
 	s.Require().NoError(err)
+	// remove the markets file
+	s.Require().NoError(os.Remove(marketConfigPath))
+
 	s.T().Log("chain teardown complete")
 }
 
@@ -406,4 +410,55 @@ func getAllCurrencyPairs() ([]slinkytypes.CurrencyPair, error) {
 	}
 
 	return pairs, nil
+}
+
+func getCPsFromGate(url string) ([]slinkytypes.CurrencyPair, error) {
+	// get the number of markets from the environment
+	numMarkets, err := strconv.Atoi(os.Getenv("NUM_MARKETS"))
+	if err != nil {
+		numMarkets = 1100
+	}
+
+	// perform the request
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// decode the response
+	var cps []map[string]interface{}
+	decoder := json.NewDecoder(resp.Body)
+	if err = decoder.Decode(&cps); err != nil {
+		return nil, err
+	}
+
+	tickers := make([]slinkytypes.CurrencyPair, 0, len(cps))
+	for _, cp := range cps {
+		// check if its tradeable
+		if val, _ := cp["trade_status"]; val.(string) != "tradable" {
+			continue
+		}
+
+		// create the currency pair
+		id := cp["id"].(string)
+		// split by _
+		symbols := strings.Split(id, "_")
+		tickers = append(tickers, slinkytypes.NewCurrencyPair(symbols[0], symbols[1]))
+		if len(tickers) >= numMarkets {
+			break
+		}
+	}
+
+	// write to a json file for consumption by the tests
+	file, err := os.Create(marketsPath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	if err = json.NewEncoder(file).Encode(tickers); err != nil {
+		return nil, err
+	}
+
+	return tickers, nil
 }

@@ -33,7 +33,7 @@ type DydxAppConfig struct {
 
 // initAppConfig helps to override default appConfig template and configs.
 // return "", nil if no custom configuration is required for the application.
-func initAppConfig() (string, *DydxAppConfig) {
+func InitAppConfig() (string, *DydxAppConfig) {
 	// Optionally allow the chain developer to overwrite the SDK's default
 	// server config.
 	srvCfg := serverconfig.DefaultConfig()

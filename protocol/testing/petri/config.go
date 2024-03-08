@@ -35,7 +35,13 @@ const (
 	envDigitalOceanAPIKey = "PETRI_LOAD_TEST_DIGITAL_OCEAN_API_KEY"
 	digitalOceanProviderType = "digitalocean"
 	envDigitalOceanImageID = "PETRI_LOAD_TEST_DIGITAL_OCEAN_IMAGE_ID"
+	envNumMarkets = "PETRI_LOAD_TEST_NUM_MARKETS"
 	dockerProviderType = "docker"
+	priceDaemonEnabled = "price-daemon-enabled"
+	bridgeDaemonEnabled = "bridge-daemon-enabled"
+	liquidationDaemonEnabled = "liquidation-daemon-enabled"
+	slinkyDaemonEnabled = "slinky-daemon-enabled"
+	url = "https://api.gateio.ws/api/v4/spot/currency_pairs"
 )
 var doRegions = []string{"blr1", "blr1", "fra1", "lon1", "ams3"}
 
@@ -91,10 +97,19 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 			HDPath:           hd.CreateHDPath(0, 0, 0),
 			SigningAlgorithm: "secp256k1",
 		},
-		NodeCreator:       node.CreateNode,
+		NodeCreator: node.CreateNode, // modify to account for additional parameters
 		GenesisDelegation: big.NewInt(10_000_000_000_000),
 		GenesisBalance:    big.NewInt(100_000_000_000_000),
 		NodeDefinitionModifier: func(def provider.TaskDefinition, nodeConfig petritypes.NodeConfig) provider.TaskDefinition {
+			// update flags
+			def.Entrypoint = append(def.Entrypoint, []string{
+				"--price-daemon-enabled=false",
+				"--bridge-daemon-enabled=false",
+				"--liquidation-daemon-enabled=false",
+				"--slinky-daemon-enabled=true",
+				}...
+			)
+
 			if doEnabled {
 				def.ProviderSpecificConfig = digitalocean.DigitalOceanTaskConfig{
 					Size: "c-16",
@@ -147,7 +162,8 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 		},
 	}
 
-	cps, err := getAllCurrencyPairs()
+	// update all currency-pairs
+	cps, err := getCPsFromGate(url)
 	if err != nil {
 		panic(err)
 	}

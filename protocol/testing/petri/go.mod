@@ -7,13 +7,18 @@ toolchain go1.22.0
 replace github.com/dydxprotocol/v4-chain/protocol => ../../
 
 replace (
+	// TODO(DEC-2209): Ideally we rely on a released version (we don't make any changes in our cosmos-sdk fork).
+	// In this case the latest signing mode fixes aren't tagged as a release yet.
+	cosmossdk.io/client/v2 => github.com/cosmos/cosmos-sdk/client/v2 v2.0.0-beta.1.0.20240219091002-18ea4c520045
 	// TODO(https://github.com/cosmos/rosetta/issues/76): Rosetta requires cosmossdk.io/core v0.12.0 erroneously but
 	// should use v0.11.0. The Cosmos build fails with types/context.go:65:29: undefined: comet.BlockInfo otherwise.
 	cosmossdk.io/core => cosmossdk.io/core v0.11.0
+	// Use dYdX fork of Cosmos SDK/store
+	cosmossdk.io/store => github.com/dydxprotocol/cosmos-sdk/store v1.0.3-0.20240227194839-f4e166bc1057
 	// Use dYdX fork of CometBFT
-	github.com/cometbft/cometbft => github.com/dydxprotocol/cometbft v0.38.3-0.20231204185009-5e6c4b6d67b8
+	github.com/cometbft/cometbft => github.com/dydxprotocol/cometbft v0.38.6-0.20240229050000-3b085f30b462
 	// Use dYdX fork of Cosmos SDK
-	github.com/cosmos/cosmos-sdk => github.com/dydxprotocol/cosmos-sdk v0.50.4-0.20240214225126-ba76b79cd4cf
+	github.com/cosmos/cosmos-sdk => github.com/dydxprotocol/cosmos-sdk v0.50.5-0.20240227194839-f4e166bc1057
 )
 
 replace (
@@ -211,7 +216,6 @@ require (
 	github.com/manifoldco/promptui v0.9.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
 	github.com/minio/highwayhash v1.0.2 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
@@ -299,4 +303,9 @@ require (
 	nhooyr.io/websocket v1.8.10 // indirect
 	pgregory.net/rapid v1.1.0 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
+)
+
+replace (
+	github.com/skip-mev/petri/core/v2 => ../../../../petri/core
+	github.com/skip-mev/petri/cosmos/v2 => ../../../../petri/cosmos
 )
