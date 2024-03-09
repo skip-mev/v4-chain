@@ -14,6 +14,7 @@ import (
 
 	"github.com/dydxprotocol/v4-chain/protocol/daemons/pricefeed/api"
 	daemontypes "github.com/dydxprotocol/v4-chain/protocol/daemons/types"
+	"github.com/dydxprotocol/v4-chain/protocol/daemons/constants"
 )
 
 // PriceFetcher is responsible for pulling prices from the slinky sidecar and sending them to the pricefeed server.
@@ -114,6 +115,12 @@ func (p *PriceFetcherImpl) FetchPrices(ctx context.Context) error {
 		}
 		p.logger.Info("parsed update for", "market id", id, "price", price)
 
+		// if the returned price is constants.DefaultPrice, then the price should be skipped
+		if price == constants.DefaultPrice {
+			p.logger.Info("slinky client returned a price of 0, skipping update", "market id", id)
+			continue
+		}
+
 		// append the update to the list of MarketPriceUpdates to be sent to the app's price-feed service
 		updates = append(updates, &api.MarketPriceUpdate{
 			MarketId: id,
@@ -126,6 +133,8 @@ func (p *PriceFetcherImpl) FetchPrices(ctx context.Context) error {
 			},
 		})
 	}
+
+	p.logger.Info("slinky client returned", "valid market price updates", len(updates))
 
 	// send the updates to the app's price-feed service -> these will then be piped to the
 	// x/prices indexPriceCache via the pricefeed service

@@ -14,6 +14,7 @@ import (
 	daemontypes "github.com/dydxprotocol/v4-chain/protocol/daemons/types"
 	"github.com/dydxprotocol/v4-chain/protocol/lib/slinky"
 	pricetypes "github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 )
 
 // MarketPairFetcher is a lightweight process run in a goroutine by the slinky client.
@@ -87,13 +88,25 @@ func (m *MarketPairFetcherImpl) GetIDForPair(cp oracletypes.CurrencyPair) (uint3
 // FetchIdMappings is run periodically to refresh the cache of known mappings between
 // CurrencyPair and MarketParam ID.
 func (m *MarketPairFetcherImpl) FetchIdMappings(ctx context.Context) error {
-	// fetch all market params
-	resp, err := m.PricesQueryClient.AllMarketParams(ctx, &pricetypes.QueryAllMarketParamsRequest{})
-	if err != nil {
+	params := make([]pricetypes.MarketParam, 0)
+
+	// Fetch all market params
+	if err := MakePaginatedQuery(ctx, func(ctx context.Context, req *query.PageRequest) (PaginatedGRPCResponse, error) {
+		res, err := m.PricesQueryClient.AllMarketParams(ctx, &pricetypes.QueryAllMarketParamsRequest{
+			Pagination: req,
+		})
+		if err != nil {
+			return nil, err
+		}
+		params = append(params, res.MarketParams...)
+
+		return res, nil
+	}); err != nil {
 		return err
 	}
-	var compatMappings = make(map[oracletypes.CurrencyPair]uint32, len(resp.MarketParams))
-	for _, mp := range resp.MarketParams {
+
+	var compatMappings = make(map[oracletypes.CurrencyPair]uint32, len(params))
+	for _, mp := range params {
 		cp, err := slinky.MarketPairToCurrencyPair(mp.Pair)
 		if err != nil {
 			return err
@@ -104,5 +117,35 @@ func (m *MarketPairFetcherImpl) FetchIdMappings(ctx context.Context) error {
 	m.compatMu.Lock()
 	defer m.compatMu.Unlock()
 	m.compatMappings = compatMappings
+	return nil
+}
+
+type PaginatedGRPCResponse interface {
+	GetPagination() (*query.PageResponse)
+}
+
+type QueryFunction func(ctx context.Context, req *query.PageRequest) (PaginatedGRPCResponse, error)
+
+// PaginatedRequestHandler
+func MakePaginatedQuery(ctx context.Context, qfn QueryFunction) error {
+	pag := &query.PageRequest{
+		Limit: 10000, 
+	}
+
+	for {
+		// Get the next page of results
+		resp, err := qfn(ctx, pag)
+		if err != nil {
+			return err
+		}
+
+		// Process the results
+		if len(resp.GetPagination().NextKey) == 0 {
+			break
+		}
+
+		// Update the page request
+		pag.Key = resp.GetPagination().NextKey
+	}
 	return nil
 }

@@ -73,7 +73,6 @@ import (
 
 const (
 	envKeepAlive = "PETRI_LOAD_TEST_KEEP_ALIVE"
-	marketsPath = "./markets.json"
 )
 
 // SlinkyIntegrationSuite is a test-suite used to spin up load-tests of arbitrary size for dydx nodes
@@ -272,6 +271,7 @@ func (s *SlinkyIntegrationSuite) TearDownSuite() {
 
 	// get the oracle integration-test suite keep alive env
 	if ok := os.Getenv(envKeepAlive); ok != "" {
+		s.T().Log("keep alive env set, blocking on ctrl+c to teardown chain...")
 		<-sigCh
 	}
 	err := s.chain.Teardown(context.Background())
@@ -319,7 +319,7 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 		endpoints = append(endpoints, fmt.Sprintf("%s/websocket", url))
 	}
 
-	_ = tmloadtest.Config{
+	cfg := tmloadtest.Config{
 		ClientFactory:        "slinky",
 		Connections:          1,
 		Endpoints:            endpoints,
@@ -331,8 +331,8 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 		BroadcastTxMethod:    "async",
 		EndpointSelectMethod: "supplied",
 	}
-	// err = tmloadtest.ExecuteStandalone(cfg)
-	// s.Require().NoError(err)
+	err = tmloadtest.ExecuteStandalone(cfg)
+	s.Require().NoError(err)
 }
 
 func getModuleBasics() module.BasicManager {
@@ -398,7 +398,7 @@ func (s *SlinkyIntegrationSuite) genMsg(senderAddress []byte) ([]sdk.Msg, petrit
 
 func getAllCurrencyPairs() ([]slinkytypes.CurrencyPair, error) {
 	// read the json fixture for all currency-pairs to report for
-	file, err := os.ReadFile(marketsPath)
+	file, err := os.ReadFile(marketConfigPath)
 	if err != nil {
 		return nil, err
 	}
@@ -451,7 +451,7 @@ func getCPsFromGate(url string) ([]slinkytypes.CurrencyPair, error) {
 	}
 
 	// write to a json file for consumption by the tests
-	file, err := os.Create(marketsPath)
+	file, err := os.Create(marketConfigPath)
 	if err != nil {
 		return nil, err
 	}

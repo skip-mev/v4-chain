@@ -26,7 +26,7 @@ const (
 	appConfigPath    = "config/app.toml"
 	cometConfigPath  = "config/config.toml"
 	oracleConfigPath = "oracle.json"
-	marketConfigPath = "market.json"
+	marketConfigPath = "markets.json"
 	oraclePort       = "8080"
 	oracleMetricsPort = "8010"
 	appOracleMetricsPort = "26661"
