@@ -15,6 +15,7 @@ import (
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/cosmosutil"
 	"github.com/skip-mev/petri/cosmos/v2/loadtest"
+	"github.com/skip-mev/petri/core/v2/monitoring"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 
@@ -99,7 +100,8 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 	s.Require().NoError(err)
 
 	// create the chain
-	s.chain, err = GetChain(context.Background(), s.logger, *s.spec)
+	var provider provider.Provider
+	s.chain, provider, err = GetChain(context.Background(), s.logger, *s.spec)
 	s.Require().NoError(err)
 
 	//initialize the chain
@@ -110,12 +112,34 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 	s.Require().NoError(err)
 
 	// update oracle configs on each node
+	targets := make([]string, 0)
 	for _, node := range s.chain.GetValidators() {
 		s.Require().NoError(updateOracleConfigOnNode(node.(*petrinode.Node)))
 
 		// update oracle configs
 		s.Require().NoError(updateOracleConfig(node.GetTask().Sidecars[0], cps))
+
+		nodeIP, err := node.GetTask().GetIP(context.Background())
+		s.Require().NoError(err)
+
+		sidecarIP, err := node.GetTask().Sidecars[0].GetIP(context.Background())
+		s.Require().NoError(err)
+
+		// add the comet, oracle-sidecar, app-oracle metrics ports to targets
+		targets = append(targets, fmt.Sprintf("%s:%s", nodeIP, cometMetricsPort))
+		targets = append(targets, fmt.Sprintf("%s:%s", nodeIP, appOracleMetricsPort))
+		targets = append(targets, fmt.Sprintf("%s:%s", sidecarIP, oracleMetricsPort))
 	}
+
+	// setup a prometheus instance
+	prometheus, err := monitoring.SetupPrometheusTask(context.Background(), s.logger, provider, monitoring.PrometheusOptions{
+		Targets: targets,
+		ProviderSpecificConfig: s.chain.GetValidators()[0].GetTask().Definition.ProviderSpecificConfig,
+	})
+	s.Require().NoError(err)
+
+	// start the prometheus instance
+	s.Require().NoError(prometheus.Start(context.Background(), false))
 }
 
 func updateOracleConfig(oracle *provider.Task, cps []slinkytypes.CurrencyPair) error {

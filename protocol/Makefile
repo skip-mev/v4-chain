@@ -434,11 +434,11 @@ check-sample-pregenesis-up-to-date:
 ###############################################################################
 loadtest-build:
 	@echo "Build loadtest test image at commit ${GIT_COMMIT_HASH}"
-	docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) --build-arg SLINKY_REF=$(SLINKY_REF) . -t dydxprotocol-base --no-cache --build-arg BUILD_TAGS="netgo,ledger,muslc,skip_sequence_increment_ante_handler"
+	docker build --platform linux/amd64 --build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) --build-arg SLINKY_REF=$(SLINKY_REF) . -t dydxprotocol-base --no-cache --build-arg BUILD_TAGS="netgo,ledger,muslc,skip_sequence_increment_ante_handler"
 
 loadtest-run:
 	@echo "Running loadtest at commit ${GIT_COMMIT_HASH}"
-	cd testing/petri && go test -v -race ./
+	cd testing/petri && go test -v -race -timeout 0 ./
 	@echo "Loadtest finished, cleaning up containers"
 	docker rm -f $(shell docker ps -a -q --filter ancestor=busybox)
 	docker volume rm $(shell docker volume ls -q --filter dangling=true)

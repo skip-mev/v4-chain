@@ -30,6 +30,7 @@ const (
 	oraclePort       = "8080"
 	oracleMetricsPort = "8010"
 	appOracleMetricsPort = "26661"
+	cometMetricsPort = "26660"
 	cometProfilerPort = "6060"
 	envProviderType = "PETRI_LOAD_TEST_PROVIDER_TYPE"
 	envDigitalOceanAPIKey = "PETRI_LOAD_TEST_DIGITAL_OCEAN_API_KEY"
@@ -43,7 +44,7 @@ const (
 	slinkyDaemonEnabled = "slinky-daemon-enabled"
 	url = "https://api.gateio.ws/api/v4/spot/currency_pairs"
 )
-var doRegions = []string{"blr1", "blr1", "fra1", "lon1", "ams3"}
+var doRegions = []string{"blr1", "blr1", "lon1", "ams3"}
 
 func GetChainConfig() (petritypes.ChainConfig, error) {
 	// get the digital ocean image ID
@@ -64,12 +65,12 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 		NumNodes:      2,
 		BinaryName:    "dydxprotocold",
 		Image: provider.ImageDefinition{
-			Image: "dydxprotocol-base",
+			Image: "docker.io/nikhilv01/dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
 		SidecarImage: provider.ImageDefinition{
-			Image: "dydxprotocol-base",
+			Image: "docker.io/nikhilv01/dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
@@ -115,6 +116,11 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 					Size: "c-16",
 					Region: doRegions[nodeConfig.Index%len(doRegions)], // multiplex onto multiple regions
 					ImageID: doImageID,
+				}
+
+				// update the sidecar Provider specific configs as well
+				for i := range def.Sidecars {
+					def.Sidecars[i].ProviderSpecificConfig = def.ProviderSpecificConfig
 				}
 			}
 			return def
@@ -219,15 +225,17 @@ func GetProvider(ctx context.Context, logger *zap.Logger) (provider.Provider, er
 	}
 }
 
-func GetChain(ctx context.Context, logger *zap.Logger, config petritypes.ChainConfig) (petritypes.ChainI, error) {
+func GetChain(ctx context.Context, logger *zap.Logger, config petritypes.ChainConfig) (petritypes.ChainI, provider.Provider, error) {
 	prov, err := GetProvider(ctx, logger)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return chain.CreateChain(
+	chain, err := chain.CreateChain(
 		ctx,
 		logger,
 		prov,
 		config,
 	)
+
+	return chain, prov, err
 }
