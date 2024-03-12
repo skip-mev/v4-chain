@@ -1,6 +1,8 @@
 package petri
 
 import (
+	"time"
+	"encoding/json"
 	"context"
 	"fmt"
 	"math/big"
@@ -17,6 +19,8 @@ import (
 	"github.com/skip-mev/petri/cosmos/v2/node"
 	"go.uber.org/zap"
 	"strconv"
+	oracleconfig "github.com/skip-mev/slinky/oracle/config"
+	mmtypes "github.com/skip-mev/slinky/x/marketmap/types"
 )
 
 const (
@@ -66,12 +70,12 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 		NumNodes:      2,
 		BinaryName:    "dydxprotocold",
 		Image: provider.ImageDefinition{
-			Image: "docker.io/nikhilv01/dydxprotocol-base:latest",
+			Image: "dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
 		SidecarImage: provider.ImageDefinition{
-			Image: "docker.io/nikhilv01/dydxprotocol-base:latest",
+			Image: "dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
@@ -99,7 +103,24 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 			HDPath:           hd.CreateHDPath(0, 0, 0),
 			SigningAlgorithm: "secp256k1",
 		},
-		NodeCreator: node.CreateNode, // modify to account for additional parameters
+		NodeCreator: func(ctx context.Context, l *zap.Logger, nc petritypes.NodeConfig) (petritypes.NodeI, error) {
+			nodeI, err := node.CreateNode(ctx, l, nc)
+			if err != nil {
+				return nil, err
+			}
+
+			n, ok := nodeI.(*node.Node)
+			if !ok {
+				return nil, fmt.Errorf("node is expected to be of type: %v, but is %v", (*node.Node)(nil), n)
+			}
+
+			if len(n.Sidecars) != 1 {
+				return nil, fmt.Errorf("node has %d sidecars instead of 1 oracle sidecar", len(n.Sidecars))
+			}
+
+			n.Sidecars[0].PreStart = oraclePreStart
+			return n, nil
+		}, // modify to account for additional parameters
 		GenesisDelegation: big.NewInt(10_000_000_000_000),
 		GenesisBalance:    big.NewInt(100_000_000_000_000),
 		NodeDefinitionModifier: func(def provider.TaskDefinition, nodeConfig petritypes.NodeConfig) provider.TaskDefinition {
@@ -127,6 +148,41 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 			return def
 		},
 	}, nil
+}
+
+// oraclePreStart writes the default oracle configs to the /oracle dir in the sidecar container
+func oraclePreStart(ctx context.Context, oracle *provider.Task) error {
+	oracle.Logger().Info("writing oracle config in pre-start", zap.String("sidecar", oracle.Definition.Name))
+
+	// if the config already exists, do not overwrite it
+	if _, err := oracle.ReadFile(ctx, oracleConfigPath); err == nil {
+		oracle.Logger().Info("oracle config already exists, skipping write", zap.String("sidecar", oracle.Definition.Name))
+		return nil
+	}
+
+	cfg := oracleconfig.OracleConfig{
+		UpdateInterval: 1 * time.Second,
+		MaxPriceAge:   1 * time.Second,	
+	}
+	bz, err := json.Marshal(cfg)
+	if err != nil {
+		return err
+	}
+
+	// write oracle config
+	if err := oracle.WriteFile(ctx, oracleConfigPath, bz); err != nil {
+		return err
+	}
+
+	mm := mmtypes.MarketMap{}
+
+	bz, err = json.Marshal(mm)
+	if err != nil {
+		return err
+	}
+
+	// write market config
+	return oracle.WriteFile(ctx, marketConfigPath, bz)
 }
 
 func GetGenesisModifier() petritypes.GenesisModifier {
