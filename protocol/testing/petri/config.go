@@ -23,6 +23,7 @@ const (
 	denom            = "dv4tnt"
 	prefix           = "dydx"
 	homeDir          = "/petri-test"
+	oracleHomeDir = "/oracle"
 	appConfigPath    = "config/app.toml"
 	cometConfigPath  = "config/config.toml"
 	oracleConfigPath = "oracle.json"
@@ -76,8 +77,8 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 		},
 		SidecarArgs:    []string{
 			"slinky", 
-			"--oracle-config-path", fmt.Sprintf("/etc/%s", oracleConfigPath), 
-			"--market-config-path", fmt.Sprintf("/etc/%s", marketConfigPath), 
+			"--oracle-config-path", fmt.Sprintf("%s/%s", oracleHomeDir, oracleConfigPath), 
+			"--market-config-path", fmt.Sprintf("%s/%s", oracleHomeDir, marketConfigPath), 
 			"-host", "0.0.0.0", 
 			"-port", "8080",
 		},
@@ -86,7 +87,7 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 		Bech32Prefix:   prefix,
 		EncodingConfig: encoding.GetTestEncodingCfg(),
 		HomeDir:        homeDir,
-		SidecarHomeDir: "/etc",
+		SidecarHomeDir: oracleHomeDir,
 		SidecarPorts:   []string{oraclePort, oracleMetricsPort},
 		CoinType:       "118",
 		ChainId:        "dydx-1",

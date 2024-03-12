@@ -143,19 +143,8 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 }
 
 func updateOracleConfig(oracle *provider.Task, cps []slinkytypes.CurrencyPair) error {
-	// get the current config
-	ctx := context.Background()
-	cfgBz, err := oracle.ReadFile(ctx, oracleConfigPath)
-	if err != nil {
-		return err
-	}
-
 	// unmarshal into config
 	var oracleCfg oracleconfig.OracleConfig
-	if err := json.Unmarshal(cfgBz, &oracleCfg); err != nil {
-		return err
-	}
-
 	oracleCfg.Metrics = oracleconfig.MetricsConfig{
 		Enabled: true,
 		PrometheusServerAddress: fmt.Sprintf("%s:%s", "0.0.0.0", oracleMetricsPort),
@@ -177,6 +166,7 @@ func updateOracleConfig(oracle *provider.Task, cps []slinkytypes.CurrencyPair) e
 		return err
 	}
 
+	ctx := context.Background()
 	if err := oracle.WriteFile(ctx, oracleConfigPath, bz); err != nil {
 		return err
 	}

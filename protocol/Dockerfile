@@ -57,8 +57,8 @@ RUN apk add --no-cache bash
 
 COPY --from=builder /dydxprotocol/build/dydxprotocold /bin/dydxprotocold
 COPY --from=builder /slinky/build/oracle /bin/slinky
-COPY --from=builder /slinky/config/local/oracle.json /etc/oracle.json
-COPY --from=builder /slinky/config/local/market.json /etc/market.json
+COPY --from=builder /slinky/config/local/oracle.json /oracle/oracle.json
+COPY --from=builder /slinky/config/local/market.json /oracle/market.json
 
 ENV HOME /dydxprotocol
 WORKDIR $HOME
