@@ -141,7 +141,6 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 			targets = append(targets, fmt.Sprintf("%s:%s", sidecarIP, oracleMetricsPort))
 		}()
 	}
-	s.T().Log("waiting for oracle configs to be updated")
 	wg.Wait()
 
 	// setup a prometheus instance
@@ -282,6 +281,13 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 		"consensus": petrinode.Toml{
 			"timeout_commit": "500ms",
 		},
+		"mempool": petrinode.Toml{
+			"experimental_max_gossip_connections_to_non_persistent_peers": 1,
+			"experimental_max_gossip_connections_to_persistent_peers": 7,
+		},
+		"p2p": petrinode.Toml{
+			"max_num_inbound_peers": 20,
+		},
 	}); err != nil {
 		return err
 	}
@@ -341,8 +347,8 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 
 	var endpoints []string
 
-	// send transactions to the first 3 validators
-	for _, val := range s.chain.GetValidators()[:3] {
+	// send transactions to the first validator
+	for _, val := range s.chain.GetValidators()[:1] {
 		endpoint, err := val.GetTMClient(context.Background())
 		s.Require().NoError(err)
 

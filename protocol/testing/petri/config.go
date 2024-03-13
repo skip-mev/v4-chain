@@ -49,7 +49,7 @@ const (
 	slinkyDaemonEnabled = "slinky-daemon-enabled"
 	url = "https://api.gateio.ws/api/v4/spot/currency_pairs"
 )
-var doRegions = []string{"blr1", "blr1", "lon1", "ams3"}
+var doRegions = []string{"nyc1", "nyc3"}
 
 func GetChainConfig() (petritypes.ChainConfig, error) {
 	// get the digital ocean image ID
@@ -66,8 +66,8 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 	return petritypes.ChainConfig{
 		Denom:         denom,
 		Decimals:      6,
-		NumValidators: 30,
-		NumNodes:      5,
+		NumValidators: 60,
+		NumNodes:      10,
 		BinaryName:    "dydxprotocold",
 		Image: provider.ImageDefinition{
 			Image: "nikhilv01/dydxprotocol-base:latest",
