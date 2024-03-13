@@ -46,11 +46,6 @@ func (k Keeper) CreateMarket(
 	marketPriceStore := k.getMarketPriceStore(ctx)
 	marketPriceStore.Set(lib.Uint32ToKey(marketPrice.Id), priceBytes)
 
-	cp, err := MarketPairToCurrencyPair(marketParam.Pair)
-	if err == nil {
-		k.currencyPairIDCache.AddCurrencyPair(uint64(marketParam.Id), cp.String())
-	}
-
 	// Generate indexer event.
 	k.GetIndexerEventManager().AddTxnEvent(
 		ctx,

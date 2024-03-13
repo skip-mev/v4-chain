@@ -61,9 +61,12 @@ func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPai
 			k.Logger(ctx).Error("market param pair invalid format", "pair", mp.Pair)
 			continue
 		}
+
+		// cache as many values as possible to avoid future work
+		k.currencyPairIDCache.AddCurrencyPair(uint64(mp.Id), mpCp.String())
+
+		// compare the currency pairs to the one that we're looking for
 		if strings.EqualFold(mpCp.String(), cp.String()) {
-			// cache the result
-			k.currencyPairIDCache.AddCurrencyPair(uint64(mp.Id), cp.String())
 			return uint64(mp.Id), true
 		}
 	}
