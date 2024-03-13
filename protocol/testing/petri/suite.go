@@ -21,6 +21,7 @@ import (
 
 	"os/signal"
 	"syscall"
+	"sync"
 
 	evidencemodule "cosmossdk.io/x/evidence"
 	feegrantmodule "cosmossdk.io/x/feegrant/module"
@@ -113,23 +114,33 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 
 	// update oracle configs on each node
 	targets := make([]string, 0)
-	for _, node := range s.chain.GetValidators() {
-		s.Require().NoError(updateOracleConfigOnNode(node.(*petrinode.Node)))
-
-		// update oracle configs
-		s.Require().NoError(updateOracleConfig(node.GetTask().Sidecars[0], cps))
-
-		nodeIP, err := node.GetTask().GetIP(context.Background())
-		s.Require().NoError(err)
-
-		sidecarIP, err := node.GetTask().Sidecars[0].GetIP(context.Background())
-		s.Require().NoError(err)
-
-		// add the comet, oracle-sidecar, app-oracle metrics ports to targets
-		targets = append(targets, fmt.Sprintf("%s:%s", nodeIP, cometMetricsPort))
-		targets = append(targets, fmt.Sprintf("%s:%s", nodeIP, appOracleMetricsPort))
-		targets = append(targets, fmt.Sprintf("%s:%s", sidecarIP, oracleMetricsPort))
+	wg := sync.WaitGroup{}
+	mtx := sync.Mutex{}
+	for i := range s.chain.GetValidators() {
+		node := s.chain.GetValidators()[i]
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			s.Require().NoError(updateOracleConfigOnNode(node.(*petrinode.Node)))
+	
+			// update oracle configs
+			s.Require().NoError(updateOracleConfig(node.GetTask().Sidecars[0], cps))
+	
+			nodeIP, err := node.GetTask().GetIP(context.Background())
+			s.Require().NoError(err)
+	
+			sidecarIP, err := node.GetTask().Sidecars[0].GetIP(context.Background())
+			s.Require().NoError(err)
+	
+			// add the comet, oracle-sidecar, app-oracle metrics ports to targets
+			mtx.Lock()
+			defer mtx.Unlock()
+			targets = append(targets, fmt.Sprintf("%s:%s", nodeIP, cometMetricsPort))
+			targets = append(targets, fmt.Sprintf("%s:%s", nodeIP, appOracleMetricsPort))
+			targets = append(targets, fmt.Sprintf("%s:%s", sidecarIP, oracleMetricsPort))
+		}()
 	}
+	wg.Wait()
 
 	// setup a prometheus instance
 	prometheus, err := monitoring.SetupPrometheusTask(context.Background(), s.logger, provider, monitoring.PrometheusOptions{
@@ -265,6 +276,9 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 		},
 		"instrumentation": petrinode.Toml{
 			"prometheus": true,
+		},
+		"consensus": petrinode.Toml{
+			"timeout_commit": "500ms",
 		},
 	}); err != nil {
 		return err

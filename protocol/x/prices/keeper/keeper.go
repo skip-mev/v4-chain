@@ -25,6 +25,7 @@ type (
 		indexerEventManager    indexer_manager.IndexerEventManager
 		marketToCreatedAt      map[uint32]time.Time
 		authorities            map[string]struct{}
+		currencyPairIDCache    *CurrencyPairIDCache
 	}
 )
 
@@ -48,6 +49,7 @@ func NewKeeper(
 		indexerEventManager:    indexerEventManager,
 		marketToCreatedAt:      map[uint32]time.Time{},
 		authorities:            lib.UniqueSliceToSet(authorities),
+		currencyPairIDCache:   NewCurrencyPairIDCache(),
 	}
 }
 
