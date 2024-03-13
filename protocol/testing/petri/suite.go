@@ -75,6 +75,7 @@ import (
 
 const (
 	envKeepAlive = "PETRI_LOAD_TEST_KEEP_ALIVE"
+	loadSleepInterval = 30 * time.Second
 )
 
 // SlinkyIntegrationSuite is a test-suite used to spin up load-tests of arbitrary size for dydx nodes
@@ -140,6 +141,7 @@ func (s *SlinkyIntegrationSuite) SetupSuite() {
 			targets = append(targets, fmt.Sprintf("%s:%s", sidecarIP, oracleMetricsPort))
 		}()
 	}
+	s.T().Log("waiting for oracle configs to be updated")
 	wg.Wait()
 
 	// setup a prometheus instance
@@ -338,7 +340,9 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 	s.Require().NoError(err)
 
 	var endpoints []string
-	for _, val := range s.chain.GetValidators() {
+
+	// send transactions to the first 3 validators
+	for _, val := range s.chain.GetValidators()[:3] {
 		endpoint, err := val.GetTMClient(context.Background())
 		s.Require().NoError(err)
 
@@ -359,8 +363,13 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 		BroadcastTxMethod:    "async",
 		EndpointSelectMethod: "supplied",
 	}
-	err = tmloadtest.ExecuteStandalone(cfg)
-	s.Require().NoError(err)
+
+	// perform 5 load-tests
+	for i := 0; i < 5; i++ {
+		err = tmloadtest.ExecuteStandalone(cfg)
+		s.Require().NoError(err)
+		time.Sleep(loadSleepInterval)
+	}
 }
 
 func getModuleBasics() module.BasicManager {

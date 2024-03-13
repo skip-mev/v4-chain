@@ -66,16 +66,16 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 	return petritypes.ChainConfig{
 		Denom:         denom,
 		Decimals:      6,
-		NumValidators: 4,
-		NumNodes:      2,
+		NumValidators: 30,
+		NumNodes:      5,
 		BinaryName:    "dydxprotocold",
 		Image: provider.ImageDefinition{
-			Image: "dydxprotocol-base:latest",
+			Image: "nikhilv01/dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
 		SidecarImage: provider.ImageDefinition{
-			Image: "dydxprotocol-base:latest",
+			Image: "nikhilv01/dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
