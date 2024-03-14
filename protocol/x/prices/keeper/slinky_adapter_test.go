@@ -7,9 +7,9 @@ import (
 	oracletypes "github.com/skip-mev/slinky/pkg/types"
 	"github.com/stretchr/testify/require"
 
+	"github.com/dydxprotocol/v4-chain/protocol/lib/slinky"
 	"github.com/dydxprotocol/v4-chain/protocol/testutil/constants"
 	keepertest "github.com/dydxprotocol/v4-chain/protocol/testutil/keeper"
-	"github.com/dydxprotocol/v4-chain/protocol/lib/slinky"
 	"github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
 )
 
