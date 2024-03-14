@@ -2,7 +2,6 @@ package keeper_test
 
 import (
 	"fmt"
-	"github.com/dydxprotocol/v4-chain/protocol/lib/slinky"
 	"testing"
 
 	oracletypes "github.com/skip-mev/slinky/pkg/types"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/dydxprotocol/v4-chain/protocol/testutil/constants"
 	keepertest "github.com/dydxprotocol/v4-chain/protocol/testutil/keeper"
+	"github.com/dydxprotocol/v4-chain/protocol/x/prices/keeper"
 	"github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
 )
 
@@ -117,7 +117,7 @@ func TestMarketPairToCurrencyPair(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.marketPair, func(t *testing.T) {
-			cp, err := slinky.MarketPairToCurrencyPair(tc.marketPair)
+			cp, err := keeper.MarketPairToCurrencyPair(tc.marketPair)
 			if tc.shouldFail {
 				require.Error(t, err)
 			} else {
