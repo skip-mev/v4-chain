@@ -55,11 +55,11 @@ func InitAppConfig() (string, *DydxAppConfig) {
 	appConfig := DydxAppConfig{
 		Config: *srvCfg,
 		Oracle: oracleconfig.AppConfig{
-			Enabled:                 true,
-			OracleAddress:           "localhost:8080",
-			ClientTimeout:           time.Second * 2,
-			MetricsEnabled:          false,
-			PrometheusServerAddress: "",
+			Enabled: true,
+			OracleAddress: "localhost:8080",
+			ClientTimeout: 10 * time.Second,
+			MetricsEnabled: true,
+			PrometheusServerAddress: "http://0.0.0.0:8010",
 		},
 	}
 
