@@ -56,6 +56,7 @@ const (
 	digitalOceanProviderType = "digitalocean"
 	envDigitalOceanImageID = "PETRI_LOAD_TEST_DIGITAL_OCEAN_IMAGE_ID"
 	envNumMarkets = "PETRI_LOAD_TEST_NUM_MARKETS"
+	envNumPerpetuals = "PETRI_LOAD_TEST_NUM_PERPETUALS"
 	dockerProviderType = "docker"
 	priceDaemonEnabled = "price-daemon-enabled"
 	bridgeDaemonEnabled = "bridge-daemon-enabled"
@@ -94,15 +95,15 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 		Denom:         denom,
 		Decimals:      6,
 		NumValidators: 4,
-		NumNodes:      2,
+		NumNodes:      0,
 		BinaryName:    "dydxprotocold",
 		Image: provider.ImageDefinition{
-			Image: "nikhilv01/dydxprotocol-base:latest",
+			Image: "dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
 		SidecarImage: provider.ImageDefinition{
-			Image: "nikhilv01/dydxprotocol-base:latest",
+			Image: "dydxprotocol-base:latest",
 			UID:   "1000",
 			GID:   "1000",
 		},
@@ -153,10 +154,9 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 		NodeDefinitionModifier: func(def provider.TaskDefinition, nodeConfig petritypes.NodeConfig) provider.TaskDefinition {
 			// update flags
 			def.Entrypoint = append(def.Entrypoint, []string{
-				"--price-daemon-enabled=false",
-				"--bridge-daemon-enabled=false",
-				"--liquidation-daemon-enabled=false",
-				"--slinky-daemon-enabled=true",
+					"--price-daemon-enabled=false",
+					"--bridge-daemon-enabled=false",
+					"--liquidation-daemon-enabled=false",
 				}...
 			)
 
@@ -286,8 +286,13 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 		Value: marketPrices,
 	})
 
+	numPerpetuals, err := strconv.Atoi(os.Getenv(envNumPerpetuals))
+	if err != nil {
+		numPerpetuals = len(marketParams)
+	}
+
 	// perpetuals setup
-	genKVs, pparams := setupPerpetuals(genKVs, marketParams)
+	genKVs, pparams := setupPerpetuals(genKVs, marketParams[:numPerpetuals])
 
 	// clob setup 
 	genKVs = setupCLOB(genKVs, pparams)

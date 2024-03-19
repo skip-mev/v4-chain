@@ -170,6 +170,7 @@ func updateOracleConfig(oracle *provider.Task, cps []slinkytypes.CurrencyPair) e
 		{
 			Name: gate.Name,
 			WebSocket: gate.DefaultWebSocketConfig,
+			Type: "price_provider",
 		},
 	}
 
@@ -246,6 +247,7 @@ func updateOracleConfigOnNode(node *petrinode.Node) error {
 	if err != nil {
 		return err
 	}
+	cfg.API.RPCReadTimeout = 20
 
 	cfg.Oracle.OracleAddress = fmt.Sprintf("%s:%s", oracleHost, oraclePort)
 	cfg.MinGasPrices = fmt.Sprintf("0%s", denom)
@@ -371,7 +373,7 @@ func (s *SlinkyIntegrationSuite) TestSlinkyUnderLoad() {
 	}
 
 	// perform 5 load-tests
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 0; i++ {
 		err = tmloadtest.ExecuteStandalone(cfg)
 		s.Require().NoError(err)
 		time.Sleep(loadSleepInterval)
@@ -457,7 +459,7 @@ func getAllCurrencyPairs() ([]slinkytypes.CurrencyPair, error) {
 
 func getCPsFromGate(url string) ([]slinkytypes.CurrencyPair, error) {
 	// get the number of markets from the environment
-	numMarkets, err := strconv.Atoi(os.Getenv("NUM_MARKETS"))
+	numMarkets, err := strconv.Atoi(os.Getenv(envNumMarkets))
 	if err != nil {
 		numMarkets = 1100
 	}

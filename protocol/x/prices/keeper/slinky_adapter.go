@@ -51,6 +51,7 @@ func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPai
 	// check in the keeper's cache first
 	id, found := k.currencyPairIDCache.GetIDForCurrencyPair(cp.String())
 	if found {
+		k.Logger(ctx).Info("found currency pair in cache", "id", id, "pair", cp.String())
 		return id, true
 	}
 
@@ -65,7 +66,7 @@ func (k Keeper) GetIDForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPai
 
 		// cache as many values as possible to avoid future work
 		k.currencyPairIDCache.AddCurrencyPair(uint64(mp.Id), mpCp.String())
-
+		k.Logger(ctx).Info("added currency pair to cache", "id", mp.Id, "pair", mpCp.String())
 		// compare the currency pairs to the one that we're looking for
 		if strings.EqualFold(mpCp.String(), cp.String()) {
 			return uint64(mp.Id), true

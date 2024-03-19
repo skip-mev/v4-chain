@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"math/big"
@@ -1419,6 +1420,15 @@ func New(
 	return app
 }
 
+func (app *App) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
+	res, err := app.BaseApp.CheckTx(req)
+	if err != nil {
+		return res, err
+	}
+	app.Logger().Info("CheckTx", "tx", base64.StdEncoding.EncodeToString(req.Tx), "response", res)
+	return res, err
+}
+
 func (app *App) initOracleMetrics(appOpts servertypes.AppOptions) servicemetrics.Metrics {
 	cfg, err := oracleconfig.ReadConfigFromAppOpts(appOpts)
 	if err != nil {
@@ -1542,7 +1552,7 @@ func (app *App) createProposalHandlers(
 	)
 
 	// Wrap dydx handlers with slinky handlers
-	if appFlags.VEOracleEnabled {
+	if appFlags.VEOracleEnabled  {
 		if app.oracleMetrics == nil {
 			app.oracleMetrics = app.initOracleMetrics(appOpts)
 		}
@@ -1551,7 +1561,7 @@ func (app *App) createProposalHandlers(
 			app.Logger(),
 			dydxPrepareProposalHandler,
 			dydxProcessProposalHandler,
-			ve.NewDefaultValidateVoteExtensionsFn(app.ChainID(), app.StakingKeeper),
+			ve.NewDefaultValidateVoteExtensionsFn(app.StakingKeeper),
 			veCodec,
 			extCommitCodec,
 			strategy,
