@@ -29,7 +29,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 0,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "CoinbasePro",
@@ -58,7 +59,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 0,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Coingecko",
@@ -88,7 +90,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 0,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Bitfinex",
@@ -106,7 +109,7 @@
         "maxBufferSize": 1000,
         "reconnectionTimeout": 10000000000,
         "wss": "wss://api-pub.bitfinex.com/ws/2",
-        "name": "bitfinex",
+        "name": "Bitfinex",
         "readBufferSize": 0,
         "writeBufferSize": 0,
         "handshakeTimeout": 45000000000,
@@ -116,7 +119,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Bitstamp",
@@ -134,7 +138,7 @@
         "maxBufferSize": 1024,
         "reconnectionTimeout": 10000000000,
         "wss": "wss://ws.bitstamp.net",
-        "name": "bitstamp",
+        "name": "Bitstamp",
         "readBufferSize": 0,
         "writeBufferSize": 0,
         "handshakeTimeout": 45000000000,
@@ -144,7 +148,8 @@
         "pingInterval": 10000000000,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Bybit",
@@ -162,7 +167,7 @@
         "maxBufferSize": 1000,
         "reconnectionTimeout": 10000000000,
         "wss": "wss://stream.bybit.com/v5/public/spot",
-        "name": "bybit",
+        "name": "Bybit",
         "readBufferSize": 0,
         "writeBufferSize": 0,
         "handshakeTimeout": 45000000000,
@@ -172,7 +177,8 @@
         "pingInterval": 15000000000,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "CoinbaseProWebSocket",
@@ -200,7 +206,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "CryptoCom",
@@ -228,7 +235,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Gate",
@@ -256,7 +264,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Huobi",
@@ -284,7 +293,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Kraken",
@@ -312,7 +322,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Kucoin",
@@ -340,7 +351,8 @@
         "pingInterval": 10000000000,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Mexc",
@@ -368,7 +380,8 @@
         "pingInterval": 20000000000,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     },
     {
       "name": "Okx",
@@ -396,7 +409,8 @@
         "pingInterval": 0,
         "maxReadErrorCount": 100,
         "maxSubscriptionsPerConnection": 0
-      }
+      },
+      "type": "price_provider"
     }
   ],
   "production": false,

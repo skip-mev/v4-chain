@@ -174,7 +174,7 @@ edit_config() {
 
 	# Default `timeout_commit` is 999ms. For local testnet, use a larger value to make 
 	# block time longer for easier troubleshooting.
-	dasel put -t string -f "$CONFIG_FOLDER"/config.toml '.consensus.timeout_commit' -v '5s'
+	dasel put -t string -f "$CONFIG_FOLDER"/config.toml '.consensus.timeout_commit' -v '500ms'
 }
 
 install_prerequisites

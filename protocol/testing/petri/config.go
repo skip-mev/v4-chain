@@ -1,30 +1,40 @@
 package petri
 
 import (
-	"time"
-	"encoding/json"
 	"context"
+	"encoding/json"
 	"fmt"
 	"math/big"
 	"os"
+	"time"
 
+	"strconv"
+
+	"cosmossdk.io/math"
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/dydxprotocol/v4-chain/protocol/testutil/encoding"
 	pricestypes "github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
+	subaccounttypes "github.com/dydxprotocol/v4-chain/protocol/x/subaccounts/types"
 	"github.com/skip-mev/petri/core/v2/provider"
-	"github.com/skip-mev/petri/core/v2/provider/docker"
 	"github.com/skip-mev/petri/core/v2/provider/digitalocean"
+	"github.com/skip-mev/petri/core/v2/provider/docker"
 	petritypes "github.com/skip-mev/petri/core/v2/types"
 	"github.com/skip-mev/petri/cosmos/v2/chain"
 	"github.com/skip-mev/petri/cosmos/v2/node"
-	"go.uber.org/zap"
-	"strconv"
 	oracleconfig "github.com/skip-mev/slinky/oracle/config"
 	mmtypes "github.com/skip-mev/slinky/x/marketmap/types"
+	"go.uber.org/zap"
 )
 
 const (
 	denom            = "dv4tnt"
+	usdcDenom 	  = "ibc/8E27BA2D5493AF5636760E354E46004562C46AB7EC0CC4C1CA14E9E20E2545B5"
 	prefix           = "dydx"
 	homeDir          = "/petri-test"
 	oracleHomeDir = "/oracle"
@@ -47,9 +57,22 @@ const (
 	bridgeDaemonEnabled = "bridge-daemon-enabled"
 	liquidationDaemonEnabled = "liquidation-daemon-enabled"
 	slinkyDaemonEnabled = "slinky-daemon-enabled"
+	faucetAccount = "dydx1nzuttarf5k2j0nug5yzhr6p74t9avehn9hlh8m"
 	url = "https://api.gateio.ws/api/v4/spot/currency_pairs"
+	genesisUSDCAmount = 100000000000000000
 )
-var doRegions = []string{"nyc1", "nyc3"}
+var ( 
+	doRegions = []string{"nyc1", "nyc3"}
+	cdc codec.Codec
+)
+
+func init() {
+	ir := codectypes.NewInterfaceRegistry()
+	authtypes.RegisterInterfaces(ir)
+	cryptocodec.RegisterInterfaces(ir)
+	cdc = codec.NewProtoCodec(ir)
+}
+
 
 func GetChainConfig() (petritypes.ChainConfig, error) {
 	// get the digital ocean image ID
@@ -66,8 +89,8 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 	return petritypes.ChainConfig{
 		Denom:         denom,
 		Decimals:      6,
-		NumValidators: 60,
-		NumNodes:      10,
+		NumValidators: 4,
+		NumNodes:      2,
 		BinaryName:    "dydxprotocold",
 		Image: provider.ImageDefinition{
 			Image: "nikhilv01/dydxprotocol-base:latest",
@@ -259,7 +282,149 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 		Value: marketPrices,
 	})
 
-	return chain.ModifyGenesis(genKVs)
+	// setup subaccounts
+	accounts := []string{faucetAccount}
+	subaccounts := make([]subaccounttypes.Subaccount, len(accounts))
+	for i, addr := range accounts {
+		subaccounts[i] = subaccounttypes.Subaccount{
+			Id: &subaccounttypes.SubaccountId{
+				Owner: addr,
+				Number: 0,
+			},
+			MarginEnabled: true,
+		}
+	}
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.subaccounts.subaccounts",
+		Value: subaccounts,
+	})
+
+	return func(b []byte) ([]byte, error) {
+		genBz, err := chain.ModifyGenesis(genKVs)(b)
+		if err != nil {
+			return nil, err
+		}
+
+		// unmarshal genBz and update account states
+		var genState map[string]json.RawMessage
+		if err := json.Unmarshal(genBz, &genState); err != nil {
+			return nil, err
+		}
+
+		appStateBz := genState["app_state"]
+		var appState map[string]json.RawMessage
+		if err := json.Unmarshal(appStateBz, &appState); err != nil {
+			return nil, err
+		}
+
+		// update account states
+		updatedAppState, err := updateGenesisAccounts(appState, accounts)
+		if err != nil {
+			return nil, err
+		}
+
+		genState["app_state"], err = json.Marshal(updatedAppState)
+		if err != nil {
+			return nil, err
+		}
+
+		return json.Marshal(genState)
+	}
+}
+
+type JSONAccountState struct {
+	Type string `json:"@type"`
+	Address string `json:"address"`
+	Pubkey []byte `json:"pub_key"`
+	AccountNumber uint64 `json:"account_number"`
+	Sequence uint64 `json:"sequence"`
+}
+
+func updateGenesisAccounts(genesis map[string]json.RawMessage, accounts []string) (map[string]json.RawMessage, error) {
+	// setup in auth state
+	genState, err := setupAuthState(genesis, accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	// setup in bank state
+	genState, err = setupBankState(genState, accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return genesis, nil
+}
+
+func setupBankState(genesis map[string]json.RawMessage, accounts []string) (map[string]json.RawMessage, error) {
+	bankBz, ok := genesis[banktypes.ModuleName]
+	if !ok {
+		return nil, fmt.Errorf("bank module not found in genesis")
+	}
+
+	var bankGenesis banktypes.GenesisState
+	if err := cdc.UnmarshalJSON(bankBz, &bankGenesis); err != nil {
+		return nil, err
+	}
+
+	// setup balances
+	balances := make([]banktypes.Balance, len(accounts))
+	usdcBalance := sdk.NewCoin(usdcDenom, math.NewInt(100000000000000000))
+	dydxAccountBalance := math.NewInt(1000000).Mul(math.NewInt(int64(1e18)))
+	dydxBalance := sdk.NewCoin(denom, dydxAccountBalance)
+	for i, addr := range accounts {
+		balances[i] = banktypes.Balance{
+			Address: addr,
+			Coins:   sdk.NewCoins(
+				usdcBalance,
+				dydxBalance,
+			),
+		}
+	}
+	bankGenesis.Balances = append(bankGenesis.Balances, balances...)
+
+	genesis[banktypes.ModuleName] = cdc.MustMarshalJSON(&bankGenesis)
+	return genesis, nil
+}
+
+func setupAuthState(genesis map[string]json.RawMessage, accounts []string) (map[string]json.RawMessage, error) {
+	authBz, ok := genesis[authtypes.ModuleName]
+	if !ok {
+		return nil, fmt.Errorf("auth module not found in genesis")
+	}
+
+	var authGenesis authtypes.GenesisState
+	if err := cdc.UnmarshalJSON(authBz, &authGenesis); err != nil {
+		return nil, err
+	}
+
+	// setup accounts
+	genAccounts, err := authtypes.UnpackAccounts(authGenesis.Accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, addr := range accounts {
+		accAddr, err := sdk.AccAddressFromBech32(addr)
+		if err != nil {
+			return nil, err
+		}
+		bacc := authtypes.NewBaseAccountWithAddress(accAddr)
+		genAccounts = append(genAccounts, bacc)
+	}
+
+	authGenesis.Accounts, err = authtypes.PackAccounts(genAccounts)
+	if err != nil {
+		return nil, err
+	}
+
+	authBz, err = cdc.MarshalJSON(&authGenesis)
+	if err != nil {
+		return nil, err
+	}
+	
+	genesis[authtypes.ModuleName] = authBz
+	return genesis, nil
 }
 
 func GetProvider(ctx context.Context, logger *zap.Logger) (provider.Provider, error) {
