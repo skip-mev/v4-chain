@@ -20,7 +20,9 @@ import (
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/dydxprotocol/v4-chain/protocol/testutil/encoding"
 	pricestypes "github.com/dydxprotocol/v4-chain/protocol/x/prices/types"
-	subaccounttypes "github.com/dydxprotocol/v4-chain/protocol/x/subaccounts/types"
+	satypes "github.com/dydxprotocol/v4-chain/protocol/x/subaccounts/types"
+	clobtypes "github.com/dydxprotocol/v4-chain/protocol/x/clob/types"
+	assettypes "github.com/dydxprotocol/v4-chain/protocol/x/assets/types"
 	"github.com/skip-mev/petri/core/v2/provider"
 	"github.com/skip-mev/petri/core/v2/provider/digitalocean"
 	"github.com/skip-mev/petri/core/v2/provider/docker"
@@ -29,7 +31,9 @@ import (
 	"github.com/skip-mev/petri/cosmos/v2/node"
 	oracleconfig "github.com/skip-mev/slinky/oracle/config"
 	mmtypes "github.com/skip-mev/slinky/x/marketmap/types"
+	perpetualstypes "github.com/dydxprotocol/v4-chain/protocol/x/perpetuals/types"
 	"go.uber.org/zap"
+	"github.com/dydxprotocol/v4-chain/protocol/dtypes"
 )
 
 const (
@@ -282,21 +286,31 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 		Value: marketPrices,
 	})
 
+	// perpetuals setup
+	genKVs, pparams := setupPerpetuals(genKVs, marketParams)
+
+	// clob setup 
+	genKVs = setupCLOB(genKVs, pparams)
+
 	// setup subaccounts
 	accounts := []string{faucetAccount}
-	subaccounts := make([]subaccounttypes.Subaccount, len(accounts))
-	for i, addr := range accounts {
-		subaccounts[i] = subaccounttypes.Subaccount{
-			Id: &subaccounttypes.SubaccountId{
-				Owner: addr,
-				Number: 0,
-			},
-			MarginEnabled: true,
-		}
+	genKVs, totalSubaccountQuoteBalances := setupSubAccounts(genKVs, accounts)
+
+	// setup assets state
+	assets := []assettypes.Asset{
+		{
+			Id: 0,
+			Symbol: "USDC",
+			Denom: usdcDenom,
+			DenomExponent: -6,
+			HasMarket: false,
+			AtomicResolution: -6,
+		},
 	}
+
 	genKVs = append(genKVs, chain.GenesisKV{
-		Key:   "app_state.subaccounts.subaccounts",
-		Value: subaccounts,
+		Key:   "app_state.assets.assets",
+		Value: assets,
 	})
 
 	return func(b []byte) ([]byte, error) {
@@ -318,7 +332,7 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 		}
 
 		// update account states
-		updatedAppState, err := updateGenesisAccounts(appState, accounts)
+		updatedAppState, err := updateGenesisAccounts(appState, accounts, totalSubaccountQuoteBalances)
 		if err != nil {
 			return nil, err
 		}
@@ -332,6 +346,212 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 	}
 }
 
+func setupCLOB(genKVs []chain.GenesisKV, perpetuals []perpetualstypes.PerpetualParams) []chain.GenesisKV {
+	lc := clobtypes.LiquidationsConfig{
+		MaxLiquidationFeePpm: 15000,
+		PositionBlockLimits: clobtypes.PositionBlockLimits{
+			MinPositionNotionalLiquidated: 1000000000,
+			MaxPositionPortionLiquidatedPpm: 100000,
+		},
+		SubaccountBlockLimits: clobtypes.SubaccountBlockLimits{
+			MaxNotionalLiquidated: 100000000000,
+			MaxQuantumsInsuranceLost: 1000000000000,
+		},
+		FillablePriceConfig: clobtypes.FillablePriceConfig{
+				BankruptcyAdjustmentPpm: 1000000,
+			SpreadToMaintenanceMarginRatioPpm: 1500000,
+		},
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.clob.liquidations_config",
+		Value: lc,
+	})
+
+	rlc := clobtypes.BlockRateLimitConfiguration{
+		MaxShortTermOrdersPerNBlocks: []clobtypes.MaxPerNBlocksRateLimit{
+			{
+				Limit: 200,
+				NumBlocks: 1,
+			
+			},
+		},
+		MaxShortTermOrderCancellationsPerNBlocks: []clobtypes.MaxPerNBlocksRateLimit{
+			{
+				Limit: 200,
+				NumBlocks: 1,
+			},
+		}, 
+		MaxStatefulOrdersPerNBlocks: []clobtypes.MaxPerNBlocksRateLimit{
+			{
+				Limit: 2,
+				NumBlocks: 1,
+			},
+			{
+				Limit: 20,
+				NumBlocks: 100,
+			},
+		},
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.clob.block_rate_limit_config",
+		Value: rlc,
+	})
+
+	equityTiers := []clobtypes.EquityTierLimit{
+		{
+			Limit: 0,
+			UsdTncRequired: dtypes.NewInt(0),
+		},
+		{
+			Limit: 1,
+			UsdTncRequired: dtypes.NewInt(20000000),
+		},
+		{
+			Limit: 5,
+			UsdTncRequired: dtypes.NewInt(100000000),
+		},
+		{
+			Limit: 10,
+			UsdTncRequired: dtypes.NewInt(1000000000),
+		},
+		{
+			Limit: 100,
+			UsdTncRequired: dtypes.NewInt(10000000000),
+		},
+		{
+			Limit: 200,
+			UsdTncRequired: dtypes.NewInt(100000000000),
+		},
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.clob.equity_tier_limit_config.short_term_order_equity_tiers",
+		Value: equityTiers,
+	})
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.clob.equity_tier_limit_config.stateful_order_equity_tiers",
+		Value: equityTiers,
+	})
+
+	type ClobPairJSON struct {
+		Id uint32 `json:"id"`
+		PerpetualClobMetadataId *clobtypes.PerpetualClobMetadata `json:"perpetual_clob_metadata"`
+		Status string `json:"status"`
+		StepBaseQuantums int64 `json:"step_base_quantums"`
+		SubTicksPerTick int64 `json:"subticks_per_tick"`
+		QCE int32 `json:"quantum_conversion_exponent"`
+	}
+
+	cbs := make([]ClobPairJSON, len(perpetuals))
+
+	for i, perpetual := range perpetuals {
+		cbs[i] = ClobPairJSON{
+			Id: uint32(i),
+			PerpetualClobMetadataId: &clobtypes.PerpetualClobMetadata{
+				PerpetualId: perpetual.Id,
+			},
+			Status: "STATUS_ACTIVE",
+			StepBaseQuantums: 1000000,
+			SubTicksPerTick: 1000000,
+			QCE: -9,
+		}
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.clob.clob_pairs",
+		Value: cbs,
+	})
+
+	return genKVs
+}
+
+func setupPerpetuals(genKVs []chain.GenesisKV, markets []pricestypes.MarketParam) ([]chain.GenesisKV, []perpetualstypes.PerpetualParams) {
+	params := perpetualstypes.Params{
+		FundingRateClampFactorPpm: 6000000,
+		PremiumVoteClampFactorPpm: 60000000,
+		MinNumVotesPerSample: 15,
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.perpetuals.params",
+		Value: params,
+	})
+
+	type PerpetualParams struct {
+		Params perpetualstypes.PerpetualParams `json:"params"`
+	}
+
+	perpetuals := make([]PerpetualParams, len(markets))
+	perpetualParams := make([]perpetualstypes.PerpetualParams, len(markets))
+	// add all perpetuals
+	for i, m := range markets {
+		perpetuals[i] = PerpetualParams{
+			Params: perpetualstypes.PerpetualParams{
+				Ticker: m.Pair,
+				Id: uint32(i),
+				MarketId: m.Id,
+				AtomicResolution: m.Exponent,
+				DefaultFundingPpm: 0,
+				LiquidityTier: 0,
+				MarketType: 1,
+			},
+		}
+		perpetualParams[i] = perpetuals[i].Params
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.perpetuals.perpetuals",
+		Value: perpetuals,
+	})
+
+	// add all liquidity tiers
+	lq := []perpetualstypes.LiquidityTier{
+		{
+			Id: 0,
+			Name: "Safety",
+			InitialMarginPpm: 1000000,
+			MaintenanceFractionPpm: 1000000,
+			BasePositionNotional: 1000000000,
+			ImpactNotional: 2500000000,
+		},
+	}
+
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.perpetuals.liquidity_tiers",
+		Value: lq,
+	})
+
+	return genKVs, perpetualParams
+}
+
+func setupSubAccounts(genKVs []chain.GenesisKV, accounts []string) ([]chain.GenesisKV, int64) {
+	subaccounts := make([]satypes.Subaccount, len(accounts))
+	for i, addr := range accounts {
+		subaccounts[i] = satypes.Subaccount{
+			Id: &satypes.SubaccountId{
+				Owner: addr,
+				Number: 0,
+			},
+			MarginEnabled: true,
+			AssetPositions: []*satypes.AssetPosition{
+				{
+					AssetId: 0,
+					Quantums: dtypes.NewInt(genesisUSDCAmount),
+					Index: 0,
+				},
+			},
+		}
+	}
+	genKVs = append(genKVs, chain.GenesisKV{
+		Key:   "app_state.subaccounts.subaccounts",
+		Value: subaccounts,
+	})
+	return genKVs, genesisUSDCAmount * int64(len(accounts))
+}
+
 type JSONAccountState struct {
 	Type string `json:"@type"`
 	Address string `json:"address"`
@@ -340,7 +560,7 @@ type JSONAccountState struct {
 	Sequence uint64 `json:"sequence"`
 }
 
-func updateGenesisAccounts(genesis map[string]json.RawMessage, accounts []string) (map[string]json.RawMessage, error) {
+func updateGenesisAccounts(genesis map[string]json.RawMessage, accounts []string, totalSubAccountQuoteBalances int64) (map[string]json.RawMessage, error) {
 	// setup in auth state
 	genState, err := setupAuthState(genesis, accounts)
 	if err != nil {
@@ -348,7 +568,7 @@ func updateGenesisAccounts(genesis map[string]json.RawMessage, accounts []string
 	}
 
 	// setup in bank state
-	genState, err = setupBankState(genState, accounts)
+	genState, err = setupBankState(genState, accounts, totalSubAccountQuoteBalances)
 	if err != nil {
 		return nil, err
 	}
@@ -356,7 +576,7 @@ func updateGenesisAccounts(genesis map[string]json.RawMessage, accounts []string
 	return genesis, nil
 }
 
-func setupBankState(genesis map[string]json.RawMessage, accounts []string) (map[string]json.RawMessage, error) {
+func setupBankState(genesis map[string]json.RawMessage, accounts []string, totalSubAccountQuoteBalances int64) (map[string]json.RawMessage, error) {
 	bankBz, ok := genesis[banktypes.ModuleName]
 	if !ok {
 		return nil, fmt.Errorf("bank module not found in genesis")
@@ -368,7 +588,7 @@ func setupBankState(genesis map[string]json.RawMessage, accounts []string) (map[
 	}
 
 	// setup balances
-	balances := make([]banktypes.Balance, len(accounts))
+	balances := make([]banktypes.Balance, len(accounts) + 1)
 	usdcBalance := sdk.NewCoin(usdcDenom, math.NewInt(100000000000000000))
 	dydxAccountBalance := math.NewInt(1000000).Mul(math.NewInt(int64(1e18)))
 	dydxBalance := sdk.NewCoin(denom, dydxAccountBalance)
@@ -381,6 +601,13 @@ func setupBankState(genesis map[string]json.RawMessage, accounts []string) (map[
 			),
 		}
 	}
+	// finally add balance of all subaccount quotes to subaccount module
+	subAcccModuleAddress := authtypes.NewModuleAddress(satypes.ModuleName)
+	balances[len(accounts)] = banktypes.Balance{
+		Address: subAcccModuleAddress.String(),
+		Coins:   sdk.NewCoins(sdk.NewCoin(usdcDenom, math.NewInt(totalSubAccountQuoteBalances))),
+	}
+
 	bankGenesis.Balances = append(bankGenesis.Balances, balances...)
 
 	genesis[banktypes.ModuleName] = cdc.MustMarshalJSON(&bankGenesis)
