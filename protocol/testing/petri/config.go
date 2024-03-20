@@ -94,7 +94,7 @@ func GetChainConfig() (petritypes.ChainConfig, error) {
 	return petritypes.ChainConfig{
 		Denom:         denom,
 		Decimals:      6,
-		NumValidators: 70,
+		NumValidators: 60,
 		NumNodes:      0,
 		BinaryName:    "dydxprotocold",
 		Image: provider.ImageDefinition{
@@ -266,7 +266,7 @@ func GetGenesisModifier() petritypes.GenesisModifier {
 			Pair: fmt.Sprintf("%s-%s", cp.Base, cp.Quote),
 			Exponent: -8,
 			MinExchanges: 1,
-			MinPriceChangePpm: 1,
+			MinPriceChangePpm: 5000,
 			ExchangeConfigJson: "{}",
 		}
 
