@@ -59,7 +59,7 @@ func InitAppConfig() (string, *DydxAppConfig) {
 			OracleAddress: "localhost:8080",
 			ClientTimeout: 10 * time.Second,
 			MetricsEnabled: true,
-			PrometheusServerAddress: "http://0.0.0.0:8010",
+			PrometheusServerAddress: "0.0.0.0:8010",
 		},
 	}
 
